@@ -1,8 +1,8 @@
 warmd
 =====
 
-[![Build Status](https://travis-ci.org/bichiliad/warmd.svg?branch=master)](https://travis-ci.org/bichiliad/warmd)
-[![Dependency Status](https://gemnasium.com/bichiliad/warmd.svg)](https://gemnasium.com/bichiliad/warmd)
+[![Build Status](https://travis-ci.org/malexandert/warmd.svg?branch=master)](https://travis-ci.org/malexandert/warmd)
+[![Dependency Status](https://gemnasium.com/malexandert/warmd.svg)](https://gemnasium.com/malexandert/warmd)
 
 WRCT: A Radio Music Database
 
@@ -19,7 +19,7 @@ Installation
 To get started developing, do these things
 
 1. Get [node.js](http://nodejs.org/)
-2. Clone the repo: ```git clone https://github.com/bichiliad/warmd.git```
+2. Clone the repo: ```git clone https://github.com/malexandert/warmd.git```
 3. ```mv config/keys.example.js config/keys.js```, add DB info in ```keys.config```
 5. ```npm install``` to install node dependencies
 6. ```npm start``` to start the server up with nodemon.
@@ -32,7 +32,7 @@ Here are the steps to getting everything you need ready to deploy on a fresh pro
 
 ```bash
 # Clone the repo
-git clone https://github.com/bichiliad/warmd.git
+git clone https://github.com/malexandert/warmd.git
 # Install dependencies
 cd warmd && ./scripts/ubuntu_setup.sh
 # Populate the keys.js file with mysql login info
