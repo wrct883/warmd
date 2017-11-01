@@ -5,17 +5,13 @@
   "private": true,
   "contributors": [
     {
-      "name": "Salem Hilal",
-      "email": "salemhilal@gmail.com"
-    },
-    {
-      "name": "Matt Baron",
-      "email": "mbaron50@gmail.com"
+      "name": "Marcus Todd",
+      "email": "malexander.todd@gmail.com"
     }
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/bichiliad/warmd.git"
+    "url": "https://github.com/malexandert/warmd.git"
   },
   "main": "server.js",
   "scripts": {
