@@ -5,6 +5,16 @@ var checkit = require('checkit'),
     User = mongoose.model('User');
 
 module.exports = {
+  create: function(req, res) {
+    var newUser = new User(req.body);
+    newUser.save(function(err, user) {
+      if (err) {
+        res.send(err);
+      }
+      res.json(user);
+    });
+  },
+
   exists: function(req, res) {
     if (!req.body.username && !req.body.email) {
       res.json(400, {
