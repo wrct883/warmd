@@ -2,7 +2,7 @@
 
 var should = require('should'),
     request = require('supertest'),
-    app = require('../../mongoServer');
+    app = require('../../server');
 
 describe('The Users controller', function() {
   it('should check if a User exists given their username', function(done) {

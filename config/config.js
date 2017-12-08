@@ -6,19 +6,27 @@ module.exports = {
   'development': {
     port: 3000,
     root: root,
-    debug: true,
+    debug: true
   },
-  
+
   'test': {
     port: 3000,
     root: root,
     debug: false
   },
 
-  'production': {
-    port: 443, 
+  'mongo': {
+    port: 3000,
     root: root,
     debug: false,
+    is_mongo: true,
+    routes_dir: './mongoRoutes'
+  },
+
+  'production': {
+    port: 443,
+    root: root,
+    debug: false
   }
 
 };
