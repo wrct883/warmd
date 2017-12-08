@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "acl": "~0.4.0",
+    "bcrypt": "^1.0.3",
     "body-parser": "~1.6.0",
     "bookshelf": "~0.7.0",
     "checkit": "^0.2.0-pre",
