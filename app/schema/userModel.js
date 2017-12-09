@@ -41,11 +41,13 @@ var UserSchema = new Schema({
   },
   date_joined: {
     type: Date,
-    required: true
+    required: true,
+    default: new Date()
   },
   is_active: {
     type: Boolean,
-    required: true
+    required: true,
+    default: true
   }
 });
 
