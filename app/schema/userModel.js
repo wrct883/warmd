@@ -51,10 +51,14 @@ var UserSchema = new Schema({
   }
 });
 
+// Password encryption functions
 // Middleware to encrypt passwords before saving
-UserSchema.pre('save', function(user) {
+UserSchema.pre('save', function(next) {
+  var user = this;
   bcrypt.hash(this.password, BCRYPT_SALT_ROUNDS, function(err, hash) {
-    this.password = hash;
+    if (err) next(err);
+    user.password = hash;
+    next();
   });
 });
 
