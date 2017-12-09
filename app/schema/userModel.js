@@ -62,4 +62,12 @@ UserSchema.pre('save', function(next) {
   });
 });
 
+// Compare plaintext passwords to our hash
+UserSchema.methods.comparePassword = function(pw, callback) {
+  bcrypt.compare(pw, this.password, function(err, isMatch) {
+    if (err) callback(err);
+    callback(null, isMatch);
+  });
+};
+
 module.exports = mongoose.model('User', UserSchema);
