@@ -29,7 +29,55 @@ describe('The User Model', function() {
 
     newUser.validate(function(err) {
       expect(err.name).to.equal('ValidationError');
-      console.dir(err.errors, {depth: 0});
+      done();
+    });
+  });
+
+  it('should validate new users with the right amount of information', function(done) {
+    var newUser = new User({
+      username: 'user',
+      password: 'secret',
+      email: 'newuser@example.com'
+    });
+
+    newUser.validate(function(err) {
+      expect(err).to.be.null;
+      done();
+    });
+  });
+
+  it('should create a new User', function(done) {
+    var newUser = new User({
+      username: 'user',
+      password: 'secret',
+      email: 'newuser@example.com'
+    });
+
+    newUser
+      .save(newUser)
+      .then(function(user) {
+        User.find({username: 'user'}, function(err, found) {
+          if (err) done(err);
+          expect(found.length).to.equal(1);
+          expect(found[0]).to.have.property('username', 'user');
+          found[0].comparePassword('secret', function(matchErr, isMatch) {
+            if (matchErr) done(matchErr);
+
+            expect(isMatch).to.be.true;
+            done();
+          });
+        });
+      })
+      .catch(function(err) {
+        done(err);
+      });
+  });
+
+  after(function(done) {
+    // Drop Users collection
+    User.remove({}, function(err) {
+      if (err) done(err);
+      console.log('Users collection dropped');
       done();
     });
   });
