@@ -72,15 +72,11 @@ module.exports = {
       });
     }
 
-    checkit({username: ['string'], email: ['string']})
-      .run(req.body)
-      .then(function(data) {
-        User.findOne(req.body, function(err, result) {
-          if (err) {
-            res.json(err);
-          }
-          res.json({exists: (result !== null)});
-        });
-      });
+    User.findOne(req.body, function(err, result) {
+      if (err) {
+        res.json(err);
+      }
+      res.json({exists: (result !== null)});
+    });
   }
 };
