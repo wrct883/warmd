@@ -14,7 +14,7 @@ module.exports = {
         res.json(user);
       })
       .catch(function(err) {
-        res.send(err);
+        res.json(err);
       });
   },
 
@@ -49,11 +49,11 @@ module.exports = {
         res.json(updatedUser);
       })
       .catch(function(err) {
-        res.send(err);
+        res.json(err);
       });
   },
 
-  // Delete a User
+  // Delete a json
   delete: function(req, res) {
     User
       .findOneAndRemove({username: req.userData.username})
@@ -79,7 +79,7 @@ module.exports = {
       .then(function(data) {
         User.findOne(req.body, function(err, result) {
           if (err) {
-            res.send(err);
+            res.json(err);
           }
           res.json({exists: (result !== null)});
         });
