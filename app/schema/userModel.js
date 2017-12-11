@@ -2,6 +2,7 @@
 
 var mongoose = require('mongoose'),
     bcrypt = require('bcrypt'),
+    mongooseHidden = require('mongoose-hidden')(),
     BCRYPT_SALT_ROUNDS = 10;
 
 var Schema = mongoose.Schema;
@@ -16,7 +17,8 @@ var UserSchema = new Schema({
   dj_name: String,
   password: {
     type: String,
-    required: true
+    required: true,
+    hide: true
   },
   email: {
     type: String,
@@ -69,5 +71,8 @@ UserSchema.methods.comparePassword = function(pw, callback) {
     callback(null, isMatch);
   });
 };
+
+// Plugin to not render passwords
+UserSchema.plugin(mongooseHidden);
 
 module.exports = mongoose.model('User', UserSchema);

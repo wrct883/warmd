@@ -9,7 +9,7 @@ module.exports = {
     var newUser = new User(req.body);
     newUser.save()
       .then(function(user) {
-        res.json(user);
+        res.json(user.toJSON());
       })
       .catch(function(err) {
         res.status(400).json(err);
@@ -35,14 +35,14 @@ module.exports = {
 
   // Display a User that was loaded
   show: function(req, res) {
-    res.json(req.userData);
+    res.json(req.userData.toJSON());
   },
 
   // Update a User
   update: function(req, res) {
     User.findOneAndUpdate({username: req.userData.username}, req.body, {new: true})
       .then(function(updatedUser) {
-        res.json(updatedUser);
+        res.json(updatedUser.toJSON());
       })
       .catch(function(err) {
         res.status(400).json(err);
