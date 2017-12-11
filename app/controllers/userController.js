@@ -40,7 +40,7 @@ module.exports = {
   // Update a User
   update: function(req, res) {
     User
-      .findOneAndUpdate(req.userData.username, req.body, {new: true})
+      .findOneAndUpdate({username: req.userData.username}, req.body, {new: true})
       .then(function(updatedUser) {
         res.json(updatedUser);
       })
