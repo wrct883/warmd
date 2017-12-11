@@ -67,6 +67,40 @@ describe('The Users controller', function() {
     });
   });
 
+  describe('POST /users/new', function() {
+    it('should create a new User', function(done) {
+      request.agent(app)
+        .post('/users/new')
+        .send({
+          username: 'test4',
+          password: 'secret4',
+          email: 'test4@example.com'
+        })
+        .end(function(err, res) {
+          expect(err).to.be.null;
+          expect(res.statusCode).to.equal(200);
+          expect(res.body).to.have.property('username', 'test4');
+          done();
+        });
+    });
+
+    it('should fail to create a User with insufficient information', function(done) {
+      request.agent(app)
+        .post('/users/new')
+        .send({
+          username: 'testBad'
+        })
+        .end(function(err, res) {
+          expect(err).to.be.null;
+          expect(res.statusCode).to.equal(400);
+          expect(res.body).to.have.property('errors');
+          expect(res.body.errors).to.have.property('email');
+          expect(res.body.errors).to.have.property('password');
+          done();
+        });
+    });
+  });
+
   after(function(done) {
     User.remove({})
       .then(function() {
