@@ -23,6 +23,10 @@ module.exports = {
     User
       .findOne({username: username})
       .then(function(user) {
+        if (!user) {
+          next(new Error('User with username ' + username + ' not found'));
+        }
+
         // Can't do req.user, interferes with Passport
         req.userData = user;
         next();
