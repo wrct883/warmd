@@ -1,6 +1,6 @@
 'use strict';
 
-var should = require('should'),
+var expect = require('chai').expect,
     request = require('supertest'),
     app = require('../../server');
 
@@ -12,7 +12,9 @@ describe('The Users controller', function() {
         username: 'matodd'
       })
       .end(function(err, res) {
-        should.not.exist(err);
+        expect(err).to.be.null;
+        expect(res.statusCode).to.equal(200);
+        expect(res.body).to.have.property('exists', false);
         done();
       });
   });
