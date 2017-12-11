@@ -12,7 +12,7 @@ module.exports = {
         res.json(user);
       })
       .catch(function(err) {
-        res.json(err);
+        res.status(400).json(err);
       });
   },
 
@@ -45,7 +45,7 @@ module.exports = {
         res.json(updatedUser);
       })
       .catch(function(err) {
-        res.json(err);
+        res.status(400).json(err);
       });
   },
 
@@ -62,7 +62,7 @@ module.exports = {
 
   exists: function(req, res) {
     if (!req.body.username && !req.body.email) {
-      res.json({
+      res.status(400).json({
         error: 'GET /exists must contain either a username, an email, or both'
       });
     }
@@ -72,7 +72,7 @@ module.exports = {
         res.json({exists: (result !== null)});
       })
       .catch(function(err) {
-        res.json(err);
+        res.status(400).json(err);
       });
   }
 };
