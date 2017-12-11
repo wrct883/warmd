@@ -25,8 +25,8 @@ var UserSchema = new Schema({
   },
   auth_level: {
     type: String,
-    enum: ['none', 'user', 'exec', 'admin'],
-    default: 'none',
+    enum: ['None', 'User', 'Exec', 'Admin'],
+    default: 'None',
     required: true
   },
   training_status: {
