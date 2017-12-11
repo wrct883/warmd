@@ -53,6 +53,20 @@ module.exports = {
       });
   },
 
+  // Delete a User
+  delete: function(req, res) {
+    User
+      .findOneAndRemove({username: req.userData.username})
+      .then(function(removedUser) {
+        res.json(200, {
+          removedUser: removedUser.username
+        });
+      })
+      .catch(function(err) {
+        res.json(500, err);
+      });
+  },
+
   exists: function(req, res) {
     if (!req.body.username && !req.body.email) {
       res.json(400, {
