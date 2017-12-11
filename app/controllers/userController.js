@@ -1,7 +1,6 @@
 'use strict';
 
-var checkit = require('checkit'),
-    mongoose = require('mongoose'),
+var mongoose = require('mongoose'),
     User = mongoose.model('User');
 
 module.exports = {
