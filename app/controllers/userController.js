@@ -11,10 +11,10 @@ module.exports = {
     newUser
       .save()
       .then(function(user) {
-        res.json(user);
+        res.status(200).json(user);
       })
       .catch(function(err) {
-        res.json(err);
+        res.status(400).json(err);
       });
   },
 
@@ -38,7 +38,7 @@ module.exports = {
 
   // Display a User that was loaded
   show: function(req, res) {
-    res.json(req.userData);
+    res.status(200).json(req.userData);
   },
 
   // Update a User
@@ -46,10 +46,10 @@ module.exports = {
     User
       .findOneAndUpdate({username: req.userData.username}, req.body, {new: true})
       .then(function(updatedUser) {
-        res.json(updatedUser);
+        res.status(200).json(updatedUser);
       })
       .catch(function(err) {
-        res.json(err);
+        res.status(400).json(err);
       });
   },
 
@@ -58,18 +58,16 @@ module.exports = {
     User
       .findOneAndRemove({username: req.userData.username})
       .then(function(removedUser) {
-        res.json(200, {
-          removedUser: removedUser.username
-        });
+        res.status(200).json({removedUser: removedUser.username});
       })
       .catch(function(err) {
-        res.json(500, err);
+        res.status(500).json(err);
       });
   },
 
   exists: function(req, res) {
     if (!req.body.username && !req.body.email) {
-      res.json(400, {
+      res.status(400).json({
         error: 'GET /exists must contain either a username, an email, or both'
       });
     }
