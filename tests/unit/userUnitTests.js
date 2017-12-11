@@ -56,16 +56,16 @@ describe('The User Model', function() {
     newUser
       .save(newUser)
       .then(function(user) {
-        User.find({username: 'user'}, function(err, found) {
-          if (err) done(err);
-          expect(found.length).to.equal(1);
-          expect(found[0]).to.have.property('username', 'user');
-          found[0].comparePassword('secret', function(matchErr, isMatch) {
-            if (matchErr) done(matchErr);
+        return User.find({username: 'user'});
+      })
+      .then(function(found) {
+        expect(found.length).to.equal(1);
+        expect(found[0]).to.have.property('username', 'user');
+        found[0].comparePassword('secret', function(matchErr, isMatch) {
+          if (matchErr) done(matchErr);
 
-            expect(isMatch).to.be.true;
-            done();
-          });
+          expect(isMatch).to.be.true;
+          done();
         });
       })
       .catch(function(err) {
@@ -78,20 +78,13 @@ describe('The User Model', function() {
       first_name: 'User'
     };
 
-    // We initally expect the User to not have a first name
     User
       .findOne({username: 'user'})
       .then(function(user) {
         expect(user).to.have.property('username', 'user');
         expect(user.first_name).to.be.undefined;
+        return User.findOneAndUpdate({username: 'user'}, update, {new: true});
       })
-      .catch(function(err) {
-        done(err);
-      });
-
-    // Now let's add one
-    User
-      .findOneAndUpdate({username: 'user'}, update, {new: true})
       .then(function(updatedUser) {
         expect(updatedUser).to.have.property('first_name', 'User');
         done();
@@ -106,20 +99,15 @@ describe('The User Model', function() {
       .count({})
       .then(function(count) {
         expect(count).to.equal(1);
+        return User.findOneAndRemove({username: 'user'});
       })
-      .catch(function(err) {
-        done(err);
-      });
-
-    User
-      .findOneAndRemove({username: 'user'})
       .then(function(removedUser) {
         expect(removedUser).to.have.property('username', 'user');
-        User.count({}, function(err, count) {
-          if (err) done(err);
-          expect(count).to.equal(0);
-          done();
-        });
+        return User.count({});
+      })
+      .then(function(count) {
+        expect(count).to.equal(0);
+        done();
       })
       .catch(function(err) {
         done(err);
