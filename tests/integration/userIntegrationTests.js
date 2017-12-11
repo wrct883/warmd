@@ -68,8 +68,7 @@ describe('The Users controller', function() {
   });
 
   after(function(done) {
-    User
-      .remove({})
+    User.remove({})
       .then(function() {
         console.log('Users collection dropped');
         done();

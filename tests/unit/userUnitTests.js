@@ -53,8 +53,7 @@ describe('The User Model', function() {
       email: 'newuser@example.com'
     });
 
-    newUser
-      .save(newUser)
+    newUser.save()
       .then(function(user) {
         return User.find({username: 'user'});
       })
@@ -78,8 +77,7 @@ describe('The User Model', function() {
       first_name: 'User'
     };
 
-    User
-      .findOne({username: 'user'})
+    User.findOne({username: 'user'})
       .then(function(user) {
         expect(user).to.have.property('username', 'user');
         expect(user.first_name).to.be.undefined;
@@ -95,8 +93,7 @@ describe('The User Model', function() {
   });
 
   it('should delete a user', function(done) {
-    User
-      .count({})
+    User.count({})
       .then(function(count) {
         expect(count).to.equal(1);
         return User.findOneAndRemove({username: 'user'});
@@ -115,11 +112,13 @@ describe('The User Model', function() {
   });
 
   after(function(done) {
-    // Drop Users collection
-    User.remove({}, function(err) {
-      if (err) done(err);
-      console.log('Users collection dropped');
-      done();
-    });
+    User.remove({})
+      .then(function() {
+        console.log('Users collection dropped');
+        done();
+      })
+      .catch(function(err) {
+        done(err);
+      });
   });
 });

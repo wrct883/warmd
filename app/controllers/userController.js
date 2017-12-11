@@ -8,8 +8,7 @@ module.exports = {
   // Create a new User
   create: function(req, res) {
     var newUser = new User(req.body);
-    newUser
-      .save()
+    newUser.save()
       .then(function(user) {
         res.json(user);
       })
@@ -20,8 +19,7 @@ module.exports = {
 
   // Load a User from the database
   load: function(req, res, next, username) {
-    User
-      .findOne({username: username})
+    User.findOne({username: username})
       .then(function(user) {
         if (!user) {
           next(new Error('User with username ' + username + ' not found'));
@@ -43,8 +41,7 @@ module.exports = {
 
   // Update a User
   update: function(req, res) {
-    User
-      .findOneAndUpdate({username: req.userData.username}, req.body, {new: true})
+    User.findOneAndUpdate({username: req.userData.username}, req.body, {new: true})
       .then(function(updatedUser) {
         res.json(updatedUser);
       })
@@ -55,8 +52,7 @@ module.exports = {
 
   // Delete a json
   delete: function(req, res) {
-    User
-      .findOneAndRemove({username: req.userData.username})
+    User.findOneAndRemove({username: req.userData.username})
       .then(function(removedUser) {
         res.json({removedUser: removedUser.username});
       })
@@ -72,8 +68,7 @@ module.exports = {
       });
     }
 
-    User
-      .findOne(req.body)
+    User.findOne(req.body)
       .then(function(result) {
         res.json({exists: (result !== null)});
       })
