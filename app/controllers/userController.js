@@ -8,17 +8,20 @@ module.exports = {
   // Create a new User
   create: function(req, res) {
     var newUser = new User(req.body);
-    newUser.save(function(err, user) {
-      if (err) {
+    newUser
+      .save()
+      .then(function(user) {
+        res.json(user);
+      })
+      .catch(function(err) {
         res.send(err);
-      }
-      res.json(user);
-    });
+      });
   },
 
   // Load a User from the database
   load: function(req, res, next, username) {
-    User.findOne({username: username})
+    User
+      .findOne({username: username})
       .then(function(user) {
         // Can't do req.user, interferes with Passport
         req.userData = user;
