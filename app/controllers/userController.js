@@ -34,7 +34,7 @@ module.exports = {
 
   // Display a User that was loaded
   show: function(req, res) {
-    res.json(req.userData.toJSON());
+    res.json(req.userData);
   },
 
   // Update a User
