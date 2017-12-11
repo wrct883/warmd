@@ -37,7 +37,7 @@ describe('The Users controller', function() {
       });
   });
 
-  describe('GET /users/exists', function() {
+  describe('/users/exists', function() {
     it('should check if a User exists given their username', function(done) {
       request.agent(app)
         .post('/users/exists')
@@ -67,7 +67,7 @@ describe('The Users controller', function() {
     });
   });
 
-  describe('POST /users/new', function() {
+  describe('/users/new', function() {
     it('should create a new User', function(done) {
       request.agent(app)
         .post('/users/new')
@@ -80,6 +80,7 @@ describe('The Users controller', function() {
           expect(err).to.be.null;
           expect(res.statusCode).to.equal(200);
           expect(res.body).to.have.property('username', 'test4');
+          expect(res.body).to.not.have.property('password');
           done();
         });
     });
