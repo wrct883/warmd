@@ -72,11 +72,13 @@ module.exports = {
       });
     }
 
-    User.findOne(req.body, function(err, result) {
-      if (err) {
+    User
+      .findOne(req.body)
+      .then(function(result) {
+        res.json({exists: (result !== null)});
+      })
+      .catch(function(err) {
         res.json(err);
-      }
-      res.json({exists: (result !== null)});
-    });
+      });
   }
 };
