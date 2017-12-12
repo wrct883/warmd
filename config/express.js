@@ -71,7 +71,7 @@ module.exports = function(app, config, passport) {
 
   // Routes
   if (config.is_mongo) {
-    require(config.routes_dir)(app, config);
+    require(config.routes_dir)(app, config, passport);
   } else {
     require('./routes')(app, config, passport);
   }

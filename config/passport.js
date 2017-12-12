@@ -1,65 +1,47 @@
 'use strict';
 
 var LocalStrategy = require('passport-local').Strategy,
-   crypto = require('crypto'),
-   DB = require('bookshelf').DB,
-   User = require('../app/models/user').model, 
-   utils = require('./middlewares/utils'),
-   encryptPassword = utils.encryptPassword;
+    User = require('../app/schema/userModel');
 
 module.exports = function(passport) {
+  // user -> username
+  passport.serializeUser(function(user, done) {
+    done(null, user.username);
+  });
 
-   // user -> id
-   passport.serializeUser(function(user, done) {
-      done(null, user.attributes.UserID);
-   });
-
-   // id -> user
-   passport.deserializeUser(function(id, done) {
-
-      User.forge({
-         userID: id
-      })
-      .fetch() // Make sure we find a matching ID
+  // id -> user
+  passport.deserializeUser(function(username, done) {
+    User.findOne({username: username})
       .then(function(user) {
-        if(!user) { // No user found
-          done(null, false);
+        if (!user) { // No user found
+          done(new Error('No User found'));
         } else {
           done(null, user);
         }
-      }, function(err) {
-         if (err.message && err.message.indexOf('EmptyResponse') !== -1) {
-            done(new Error('No such user'));
-         } else {
-            done(err);
-         }
+      })
+      .catch(function(err) {
+        done(err);
       });
+  });
 
-   });
-
-   // use local strategy
-   passport.use(new LocalStrategy(
-     function(username, password, done) {
-       User.forge({
-         User: username
-       })
-       .fetch({
-         //require: true
-       })
-       .then(function(user) {
-         if(!user) {
-          return done(null, false);
-         }
-         // Found user
-         if (encryptPassword(password, user.attributes.User) === user.attributes.Password){
-            return done(null, user);
-         } else {
-            return done(null, false);
-         }
-        }, function(err) { // Could not find user / something went wrong
+  // use local strategy
+  passport.use(new LocalStrategy(
+    function(username, password, done) {
+      User.findOne({username: username})
+        .then(function(user) {
+          if (!user) {
+            return done(null, false, {message: 'Incorrect username'});
+          }
+          // Found user
+          user.comparePassword(password, function(matchErr, isMatch) {
+            if (matchErr) done(matchErr);
+            if (isMatch) return done(null, user);
+            return done(null, false, {message: 'Incorrect password'});
+          });
+        })
+        .catch(function(err) { // Could not find user / something went wrong
           return done(err);
         });
-     }
+    }
   ));
-
 };
