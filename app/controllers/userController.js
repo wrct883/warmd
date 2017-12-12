@@ -21,9 +21,10 @@ module.exports = {
     User.findOne({username: username})
       .then(function(user) {
         if (!user) {
-          next(new Error('User with username ' + username + ' not found'));
+          res.status(401).json({
+            QueryError: 'User with username ' + username + ' not found'
+          });
         }
-
         // Can't do req.user, interferes with Passport
         req.userData = user;
         next();
@@ -63,7 +64,7 @@ module.exports = {
   exists: function(req, res) {
     if (!req.body.username && !req.body.email) {
       res.status(400).json({
-        error: 'GET /exists must contain either a username, an email, or both'
+        QueryError: 'GET /exists must contain either a username, an email, or both'
       });
     }
 
@@ -81,41 +82,24 @@ module.exports = {
       if (req.isAuthenticated()) {
         return next();
       }
-
-      // Remember where they were going
-      req.session.returnTo = req.originalUrl;
-      res.redirect('/login');
+      res.status(401).json({
+        AuthenticationError: 'You don\'t have permission to view this resource'
+      });
     });
   },
 
-  session: function(req, res) {
-    var redirectTo = req.session.returnTo
-      ? req.session.returnTo
-      : '/';
-    res.redirectTo(redirectTo);
-  },
-
-  // Render a user login page
-  login: function(req, res) {
-    res.format({
-      // Asking for JSON but aren't authed.
-      json: function() {
-        // TODO: Make sure JSON errors are formatted uniformly. Maybe a util function?
+  hasAccess: function(level) {
+    var levels = ['None', 'User', 'Exec', 'Admin'];
+    return function(req, res, next) {
+      var minimumAuth = levels.indexOf(level);
+      // Is the logged in user at *least* the provided level of auth?
+      if (req.user && levels.indexOf(req.user.auth_level) >= minimumAuth) {
+        next();
+      } else {
         res.status(401).json({
-          error: 'You don\'t have permission to view this resource. Try loggin in.'
+          AuthenticationError: 'You don\'t have permission to view this resource'
         });
-      },
-
-      // They were rerouted from something else, should just log in.
-      html: function() {
-        res.render('users/login');
       }
-    });
-  },
-
-  // Log the user out, redirect back to login.
-  logout: function(req, res) {
-    req.logout();
-    res.redirect('/login');
+    };
   }
 };
