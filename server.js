@@ -61,7 +61,6 @@ if (!config.is_mongo) {
   db.plugin('visibility');                            // Use visibility plugin
   bookshelf.DB = db;                                  // Expose globally
   app.set('bookshelf', bookshelf);
-  require('./config/passport')(passport, config);     // Passport
 } else {
   // Register schemas
   require('./app/schema/userModel');
@@ -69,6 +68,7 @@ if (!config.is_mongo) {
   mongoose.Promise = global.Promise;
   mongoose.connect('mongodb://localhost/warmd', {useMongoClient: true});
 }
+require('./config/passport')(passport, config);     // Passport
 require('./config/express')(app, config, passport); // Express config, routes
 //================================
 // Initialize ====================
