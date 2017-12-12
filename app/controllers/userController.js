@@ -74,5 +74,48 @@ module.exports = {
       .catch(function(err) {
         res.status(400).json(err);
       });
+  },
+
+  isAuthed: function(req, res, next) {
+    process.nextTick(function() {
+      if (req.isAuthenticated()) {
+        return next();
+      }
+
+      // Remember where they were going
+      req.session.returnTo = req.originalUrl;
+      res.redirect('/login');
+    });
+  },
+
+  session: function(req, res) {
+    var redirectTo = req.session.returnTo
+      ? req.session.returnTo
+      : '/';
+    res.redirectTo(redirectTo);
+  },
+
+  // Render a user login page
+  login: function(req, res) {
+    res.format({
+      // Asking for JSON but aren't authed.
+      json: function() {
+        // TODO: Make sure JSON errors are formatted uniformly. Maybe a util function?
+        res.status(401).json({
+          error: 'You don\'t have permission to view this resource. Try loggin in.'
+        });
+      },
+
+      // They were rerouted from something else, should just log in.
+      html: function() {
+        res.render('users/login');
+      }
+    });
+  },
+
+  // Log the user out, redirect back to login.
+  logout: function(req, res) {
+    req.logout();
+    res.redirect('/login');
   }
 };
