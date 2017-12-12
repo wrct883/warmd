@@ -7,6 +7,13 @@ var expect = require('chai').expect,
 
 describe('The Users controller', function() {
   before(function(done) {
+    var admin = new User({
+      username: 'admin',
+      password: 'adminSecret',
+      email: 'admin@example.com',
+      auth_level: 'Admin'
+    });
+
     var testUser1 = new User({
       username: 'test1',
       password: 'secret1',
@@ -25,7 +32,10 @@ describe('The Users controller', function() {
       email: 'test3@example.com'
     });
 
-    testUser1.save()
+    admin.save()
+      .then(function() {
+        return testUser1.save();
+      })
       .then(function() {
         return testUser2.save();
       })
@@ -35,6 +45,22 @@ describe('The Users controller', function() {
       .then(function() {
         done();
       });
+  });
+
+  describe('/auth', function() {
+    it('should authenticate a username/password combo', function(done) {
+      request.agent(app)
+        .post('/auth')
+        .send({
+          username: 'admin',
+          password: 'adminSecret'
+        })
+        .end(function(err, res) {
+          expect(res.statusCode).to.equal(200);
+          expect(res.body).to.have.property('ok', 1);
+          done();
+        });
+    });
   });
 
   describe('/users/exists', function() {
@@ -69,31 +95,48 @@ describe('The Users controller', function() {
 
   describe('/users/new', function() {
     it('should create a new User', function(done) {
-      request.agent(app)
-        .post('/users/new')
+      var admin = request.agent(app);
+      admin.post('/auth')
         .send({
-          username: 'test4',
-          password: 'secret4',
-          email: 'test4@example.com'
+          username: 'admin',
+          password: 'adminSecret'
         })
-        .end(function(err, res) {
-          expect(err).to.be.null;
-          expect(res.statusCode).to.equal(200);
+        .expect(200)
+        .then(function(res) {
+          return admin.post('/users/new')
+            .send({
+              username: 'test4',
+              password: 'secret4',
+              email: 'test4@example.com'
+            })
+            .expect(200);
+        })
+        .then(function(res) {
           expect(res.body).to.have.property('username', 'test4');
           expect(res.body).to.not.have.property('password');
           done();
+        })
+        .catch(function(err) {
+          done(err);
         });
     });
 
     it('should fail to create a User with insufficient information', function(done) {
-      request.agent(app)
-        .post('/users/new')
+      var admin = request.agent(app);
+      admin.post('/auth')
         .send({
-          username: 'testBad'
+          username: 'admin',
+          password: 'adminSecret'
         })
-        .end(function(err, res) {
-          expect(err).to.be.null;
-          expect(res.statusCode).to.equal(400);
+        .expect(200)
+        .then(function(res) {
+          return admin.post('/users/new')
+            .send({
+              username: 'testBad'
+            })
+            .expect(400);
+        })
+        .then(function(res) {
           expect(res.body).to.have.property('errors');
           expect(res.body.errors).to.have.property('email');
           expect(res.body.errors).to.have.property('password');
