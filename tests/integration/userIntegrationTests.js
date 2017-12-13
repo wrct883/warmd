@@ -93,7 +93,7 @@ describe('The Users controller', function() {
     });
   });
 
-  describe('/users/new', function() {
+  describe('/users', function() {
     it('should create a new User', function(done) {
       var admin = request.agent(app);
       admin.post('/auth')
@@ -103,7 +103,7 @@ describe('The Users controller', function() {
         })
         .expect(200)
         .then(function(res) {
-          return admin.post('/users/new')
+          return admin.post('/users')
             .send({
               username: 'test4',
               password: 'secret4',
@@ -130,7 +130,7 @@ describe('The Users controller', function() {
         })
         .expect(200)
         .then(function(res) {
-          return admin.post('/users/new')
+          return admin.post('/users')
             .send({
               username: 'testBad'
             })
@@ -153,7 +153,7 @@ describe('The Users controller', function() {
         })
         .expect(200)
         .then(function(res) {
-          return nonAdmin.post('/users/new')
+          return nonAdmin.post('/users')
             .send({
               username: 'test5',
               password: 'hubris'
@@ -171,7 +171,7 @@ describe('The Users controller', function() {
 
     it('should require auth', function(done) {
       request.agent(app)
-        .post('/users/new')
+        .post('/users')
         .send({
           username: 'notAuthed',
           password: 'secrets',

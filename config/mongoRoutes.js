@@ -14,7 +14,7 @@ module.exports = function(app, config, passport) {
   var userRouter = new express.Router()
     .param('user', userController.load)
     .post('/exists', userController.exists)
-    .post('/new',
+    .post('/',
       userController.isAuthed,
       userController.hasAccess('Admin'),
       userController.create)
