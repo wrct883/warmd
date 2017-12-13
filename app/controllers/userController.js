@@ -97,7 +97,7 @@ module.exports = {
         next();
       } else {
         res.status(401).json({
-          AuthenticationError: 'You don\'t have permission to view this resource'
+          AuthenticationError: 'You don\'t have permission to use this resource'
         });
       }
     };
