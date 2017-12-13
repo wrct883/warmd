@@ -143,6 +143,31 @@ describe('The Users controller', function() {
           done();
         });
     });
+
+    it('should not allow non-admins to create Users', function(done) {
+      var nonAdmin = request.agent(app);
+      nonAdmin.post('/auth')
+        .send({
+          username: 'test1',
+          password: 'secret1'
+        })
+        .expect(200)
+        .then(function(res) {
+          return nonAdmin.post('/users/new')
+            .send({
+              username: 'test5',
+              password: 'hubris'
+            })
+            .expect(401);
+        })
+        .then(function(res) {
+          expect(res.body).to.have.property('AuthenticationError');
+          done();
+        })
+        .catch(function(err) {
+          done(err);
+        });
+    });
   });
 
   describe('/users/:user', function() {
