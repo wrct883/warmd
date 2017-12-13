@@ -187,43 +187,73 @@ describe('The Users controller', function() {
 
   describe('/users/:user', function() {
     it('should retrive a User with a GET request', function(done) {
-      request.agent(app)
-        .get('/users/test1')
-        .end(function(err, res) {
-          expect(err).to.be.null;
-          expect(res.statusCode).to.equal(200);
+      var user = request.agent(app);
+      user.post('/auth')
+        .send({
+          username: 'admin',
+          password: 'adminSecret'
+        })
+        .expect(200)
+        .then(function(res) {
+          return user.get('/users/test1')
+            .expect(200);
+        })
+        .then(function(res) {
           expect(res.body).to.have.property('username', 'test1');
           expect(res.body).to.have.property('email', 'test1@example.com');
           expect(res.body).to.not.have.property('password');
           done();
+        })
+        .catch(function(err) {
+          done(err);
         });
     });
 
     it('should modify a User with a PUT request', function(done) {
-      request.agent(app)
-        .put('/users/test1')
+      var user = request.agent(app);
+      user.post('/auth')
         .send({
-          first_name: 'Test',
-          last_name: 'One'
+          username: 'admin',
+          password: 'adminSecret'
         })
-        .end(function(err, res) {
-          expect(err).to.be.null;
-          expect(res.statusCode).to.equal(200);
+        .expect(200)
+        .then(function(res) {
+          return user.put('/users/test1')
+            .send({
+              first_name: 'Test',
+              last_name: 'One'
+            })
+            .expect(200);
+        })
+        .then(function(res) {
           expect(res.body).to.have.property('first_name', 'Test');
           expect(res.body).to.have.property('last_name', 'One');
           expect(res.body).to.not.have.property('password');
           done();
+        })
+        .catch(function(err) {
+          done(err);
         });
     });
 
     it('should delete a User with a DELETE request', function(done) {
-      request.agent(app)
-        .delete('/users/test4')
-        .end(function(err, res) {
-          expect(err).to.be.null;
-          expect(res.statusCode).to.equal(200);
+      var user = request.agent(app);
+      user.post('/auth')
+        .send({
+          username: 'admin',
+          password: 'adminSecret'
+        })
+        .expect(200)
+        .then(function(res) {
+          return user.delete('/users/test4')
+            .expect(200);
+        })
+        .then(function(res) {
           expect(res.body).to.have.property('removedUser', 'test4');
           done();
+        })
+        .catch(function(err) {
+          done(err);
         });
     });
   });

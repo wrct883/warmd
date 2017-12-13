@@ -18,8 +18,14 @@ module.exports = function(app, config, passport) {
       userController.isAuthed,
       userController.hasAccess('Admin'),
       userController.create)
-    .get('/:user', userController.show)
-    .put('/:user', userController.update)
-    .delete('/:user', userController.delete);
+    .get('/:user',
+      userController.isAuthed,
+      userController.show)
+    .put('/:user',
+      userController.isAuthed,
+      userController.update)
+    .delete('/:user',
+      userController.isAuthed,
+      userController.delete);
   app.use('/users', userRouter);
 };
