@@ -168,6 +168,21 @@ describe('The Users controller', function() {
           done(err);
         });
     });
+
+    it('should require auth', function(done) {
+      request.agent(app)
+        .post('/users/new')
+        .send({
+          username: 'notAuthed',
+          password: 'secrets',
+          email: 'notAuthed@example.com'
+        })
+        .expect(401)
+        .end(function(err, res) {
+          expect(res.body).to.have.property('AuthenticationError');
+          done();
+        });
+    });
   });
 
   describe('/users/:user', function() {
