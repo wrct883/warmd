@@ -195,6 +195,32 @@ describe('The Users controller', function() {
     });
   });
 
+  describe('/users/pending', function() {
+    it('should get all pending users', function(done) {
+      var admin = request.agent(app);
+      admin.post('/auth')
+        .send({
+          username: 'admin',
+          password: 'adminSecret'
+        })
+        .expect(200)
+        .then(function(res) {
+          return admin.get('/users/pending')
+            .expect(200);
+        })
+        .then(function(res) {
+          expect(res.body).to.have.length(4);
+          res.body.forEach(function(pendingUser) {
+            expect(pendingUser).to.have.property('auth_level', 'None');
+          });
+          done();
+        })
+        .catch(function(err) {
+          done(err);
+        });
+    });
+  });
+
   describe('/users/:user', function() {
     it('should retrive a User with a GET request', function(done) {
       var user = request.agent(app);

@@ -18,6 +18,10 @@ module.exports = function(app, config, passport) {
       userController.isAuthed,
       userController.hasAccess('Admin'),
       userController.create)
+    .get('/pending',
+      userController.isAuthed,
+      userController.hasAccess('Admin'),
+      userController.pending)
     .get('/:user',
       userController.isAuthed,
       userController.show)

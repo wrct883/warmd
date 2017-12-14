@@ -111,5 +111,16 @@ module.exports = {
         });
       }
     };
+  },
+
+  // Finds all pending Users in the database
+  pending: function(req, res) {
+    User.find({auth_level: 'None'})
+      .then(function(pendingUsers) {
+        res.json(pendingUsers);
+      })
+      .catch(function(err) {
+        res.status(500).json(err);
+      });
   }
 };
