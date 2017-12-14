@@ -116,7 +116,7 @@ describe('The Users controller', function() {
               password: 'secret4',
               email: 'test4@example.com'
             })
-            .expect(200);
+            .expect(201);
         })
         .then(function(res) {
           expect(res.body).to.have.property('username', 'test4');

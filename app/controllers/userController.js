@@ -9,7 +9,7 @@ module.exports = {
     var newUser = new User(req.body);
     newUser.save()
       .then(function(user) {
-        res.json(user.toJSON());
+        res.status(201).json(user.toJSON());
       })
       .catch(function(err) {
         res.status(400).json(err);
