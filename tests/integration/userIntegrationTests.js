@@ -55,10 +55,13 @@ describe('The Users controller', function() {
           username: 'admin',
           password: 'adminSecret'
         })
-        .end(function(err, res) {
-          expect(res.statusCode).to.equal(200);
+        .expect(200)
+        .then(function(res) {
           expect(res.body).to.have.property('ok', 1);
           done();
+        })
+        .catch(function(err) {
+          done(err);
         });
     });
   });
@@ -70,11 +73,13 @@ describe('The Users controller', function() {
         .send({
           email: 'test1@example.com'
         })
-        .end(function(err, res) {
-          expect(err).to.be.null;
-          expect(res.statusCode).to.equal(200);
+        .expect(200)
+        .then(function(res) {
           expect(res.body).to.have.property('exists', true);
           done();
+        })
+        .catch(function(err) {
+          done(err);
         });
     });
 
@@ -84,11 +89,13 @@ describe('The Users controller', function() {
         .send({
           email: 'test1@example.com'
         })
-        .end(function(err, res) {
-          expect(err).to.be.null;
-          expect(res.statusCode).to.equal(200);
+        .expect(200)
+        .then(function(res) {
           expect(res.body).to.have.property('exists', true);
           done();
+        })
+        .catch(function(err) {
+          done(err);
         });
     });
   });
@@ -178,9 +185,12 @@ describe('The Users controller', function() {
           email: 'notAuthed@example.com'
         })
         .expect(401)
-        .end(function(err, res) {
+        .then(function(res) {
           expect(res.body).to.have.property('AuthenticationError');
           done();
+        })
+        .catch(function(err) {
+          done(err);
         });
     });
   });
