@@ -236,6 +236,39 @@ describe('The Users controller', function() {
         });
     });
 
+    it('should prevent Users from modifying other User\'s passwords', function(done) {
+      var user = request.agent(app);
+      user.post('/auth')
+        .send({
+          username: 'test1',
+          password: 'secret1'
+        })
+        .expect(200)
+        .then(function(res) {
+          // Users should be able to change their own passwords
+          return user.put('/users/test1')
+            .send({
+              password: 'newPassword'
+            })
+            .expect(200);
+        })
+        .then(function(res) {
+          // Users can't change other User's passwords
+          return user.put('/users/test2')
+            .send({
+              password: 'alsoNewPassword'
+            })
+            .expect(401);
+        })
+        .then(function(res) {
+          expect(res.body).to.have.property('QueryError');
+          done();
+        })
+        .catch(function(err) {
+          done(err);
+        });
+    });
+
     it('should delete a User with a DELETE request', function(done) {
       var user = request.agent(app);
       user.post('/auth')

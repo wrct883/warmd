@@ -41,6 +41,13 @@ module.exports = {
 
   // Update a User
   update: function(req, res) {
+    // A User should only be able to change their own password
+    if (req.body.password && (req.userData.username !== req.user.username)) {
+      res.status(401).json({
+        QueryError: 'Cannot change passwords for other users'
+      });
+    }
+
     User.findOneAndUpdate({username: req.userData.username}, req.body, {new: true})
       .then(function(updatedUser) {
         res.json(updatedUser.toJSON());
