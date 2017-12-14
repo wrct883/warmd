@@ -57,7 +57,7 @@ module.exports = {
       });
   },
 
-  // Delete a json
+  // Delete a User
   delete: function(req, res) {
     User.findOneAndRemove({username: req.userData.username})
       .then(function(removedUser) {
@@ -68,6 +68,7 @@ module.exports = {
       });
   },
 
+  // Check if a User exists
   exists: function(req, res) {
     if (!req.body.username && !req.body.email) {
       res.status(400).json({
@@ -84,6 +85,7 @@ module.exports = {
       });
   },
 
+  // Check if someone is currently logged in
   isAuthed: function(req, res, next) {
     process.nextTick(function() {
       if (req.isAuthenticated()) {
@@ -95,6 +97,7 @@ module.exports = {
     });
   },
 
+  // Check if a User has access to a resource
   hasAccess: function(level) {
     var levels = ['None', 'User', 'Exec', 'Admin'];
     return function(req, res, next) {
