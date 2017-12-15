@@ -122,5 +122,22 @@ module.exports = {
       .catch(function(err) {
         res.status(500).json(err);
       });
+  },
+
+  // Show all Users
+  all: function(req, res) {
+    var options = {};
+    if (req.query && req.query.pending) {
+      // Show only pending users
+      options.auth_level = 'None';
+    }
+
+    User.find(options)
+      .then(function(users) {
+        res.json(users);
+      })
+      .catch(function(err) {
+        res.status(500).json(err);
+      });
   }
 };

@@ -128,6 +128,26 @@ describe('The Users controller', function() {
         });
     });
 
+    it('should retrieve all users with a GET request', function(done) {
+      var admin = request.agent(app);
+      admin.post('/auth')
+        .send({
+          username: 'admin',
+          password: 'adminSecret'
+        })
+        .expect(200)
+        .then(function(res) {
+          return admin.get('/users')
+            .expect(200);
+        })
+        .then(function(res) {
+          expect(res.body).to.have.length(5);
+          done();
+        })
+        .catch(function(err) {
+          done(err);
+        });
+    });
     it('should fail to create a User with insufficient information', function(done) {
       var admin = request.agent(app);
       admin.post('/auth')
@@ -193,9 +213,7 @@ describe('The Users controller', function() {
           done(err);
         });
     });
-  });
 
-  describe('/users/pending', function() {
     it('should get all pending users', function(done) {
       var admin = request.agent(app);
       admin.post('/auth')
@@ -205,13 +223,13 @@ describe('The Users controller', function() {
         })
         .expect(200)
         .then(function(res) {
-          return admin.get('/users/pending')
+          return admin.get('/users?pending=true')
             .expect(200);
         })
         .then(function(res) {
           expect(res.body).to.have.length(4);
-          res.body.forEach(function(pendingUser) {
-            expect(pendingUser).to.have.property('auth_level', 'None');
+          res.body.forEach(function(user) {
+            expect(user).to.have.property('auth_level', 'None');
           });
           done();
         })

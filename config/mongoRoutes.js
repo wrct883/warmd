@@ -13,15 +13,14 @@ module.exports = function(app, config, passport) {
   // User routes
   var userRouter = new express.Router()
     .param('user', userController.load)
-    .post('/exists', userController.exists)
+    .get('/',
+      userController.isAuthed,
+      userController.all)
     .post('/',
       userController.isAuthed,
       userController.hasAccess('Admin'),
       userController.create)
-    .get('/pending',
-      userController.isAuthed,
-      userController.hasAccess('Admin'),
-      userController.pending)
+    .post('/exists', userController.exists)
     .get('/:user',
       userController.isAuthed,
       userController.show)
