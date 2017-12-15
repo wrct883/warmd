@@ -66,40 +66,6 @@ describe('The Users controller', function() {
     });
   });
 
-  describe('/users/exists', function() {
-    it('should check if a User exists given their username', function(done) {
-      request.agent(app)
-        .post('/users/exists')
-        .send({
-          email: 'test1@example.com'
-        })
-        .expect(200)
-        .then(function(res) {
-          expect(res.body).to.have.property('exists', true);
-          done();
-        })
-        .catch(function(err) {
-          done(err);
-        });
-    });
-
-    it('should check if a User exists given their email', function(done) {
-      request.agent(app)
-        .post('/users/exists')
-        .send({
-          email: 'test1@example.com'
-        })
-        .expect(200)
-        .then(function(res) {
-          expect(res.body).to.have.property('exists', true);
-          done();
-        })
-        .catch(function(err) {
-          done(err);
-        });
-    });
-  });
-
   describe('/users', function() {
     it('should create a new User', function(done) {
       var admin = request.agent(app);
@@ -148,6 +114,7 @@ describe('The Users controller', function() {
           done(err);
         });
     });
+
     it('should fail to create a User with insufficient information', function(done) {
       var admin = request.agent(app);
       admin.post('/auth')
@@ -256,6 +223,35 @@ describe('The Users controller', function() {
           expect(res.body).to.have.property('username', 'test1');
           expect(res.body).to.have.property('email', 'test1@example.com');
           expect(res.body).to.not.have.property('password');
+          done();
+        })
+        .catch(function(err) {
+          done(err);
+        });
+    });
+
+    it('should check if a User exists', function(done) {
+      var user = request.agent(app);
+      user.post('/auth')
+        .send({
+          username: 'admin',
+          password: 'adminSecret'
+        })
+        .expect(200)
+        .then(function(res) {
+          return user.get('/users/test1?exists=true')
+            .expect(200);
+        })
+        .then(function(res) {
+          expect(res.body).to.have.property('username', 'test1');
+          expect(res.body).to.have.property('exists', true);
+        })
+        .then(function(res) {
+          return user.get('/users/badUser?exists=true');
+        })
+        .then(function(res) {
+          expect(res.body).to.have.property('username', 'badUser');
+          expect(res.body).to.have.property('exists', false);
           done();
         })
         .catch(function(err) {

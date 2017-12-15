@@ -21,12 +21,14 @@ module.exports = {
     User.findOne({username: username})
       .then(function(user) {
         if (!user) {
-          res.status(401).json({
-            QueryError: 'User with username ' + username + ' not found'
-          });
+          req.userData = {
+            error: true,
+            username: username
+          };
+        } else {
+          // Can't do req.user, interferes with Passport
+          req.userData = user;
         }
-        // Can't do req.user, interferes with Passport
-        req.userData = user;
         next();
       })
       .catch(function(err) {
@@ -36,11 +38,21 @@ module.exports = {
 
   // Display a User that was loaded
   show: function(req, res) {
-    res.json(req.userData.toJSON());
+    if (req.query && req.query.exists) {
+      res.json({
+        username: req.userData.username,
+        exists: req.userData.error === undefined
+      });
+    } else res.json(req.userData);
   },
 
   // Update a User
   update: function(req, res) {
+    if (!req.userData) {
+      res.status(400).json({
+        QueryError: 'User with username + '
+      })
+    }
     // A User should only be able to change their own password
     if (req.body.password && (req.userData.username !== req.user.username)) {
       res.status(401).json({
