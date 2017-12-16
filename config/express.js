@@ -9,28 +9,26 @@ var express = require('express'),
     methodOverride = require('method-override');
 
 module.exports = function(app, config, passport) {
-
   // Config for specific environments. Nothing here yet, really.
   var env = process.env.NODE_ENV || 'development';
-  if('development' === env) {
+  if (env === 'development') {
     // Show stack errors.
     app.set('showStackError', config.showStackError || true);
 
     // Log requests. Should probably remove this when Winston
     // becomes a more implemented thing.
     app.use(morgan());
-  } else if ('production' === env) {
+  } else if (env === 'production') {
     // Log requests. Should probably remove this when Winston
     // becomes a more implemented thing.
     app.use(morgan());
   }
 
 
-
   // Set rendering engines
   app.engine('hbs', hbs.express3({
-      partialsDir: config.root + '/app/views/partials',
-      contentHelperName: 'content',
+    partialsDir: config.root + '/app/views/partials',
+    contentHelperName: 'content'
   }));
 
   app.set('view engine', 'hbs');
@@ -43,11 +41,11 @@ module.exports = function(app, config, passport) {
   app.use(bodyParser.json());           // Request bodies (query params, payloads)
   app.use(bodyParser.urlencoded({       // Request bodies (query params, payloads)
     extended: true
-  }));     
+  }));
   app.use(methodOverride());            // PUT / DELETE request support
   app.use(session({                     // Session store. TODO: Use redis
     secret: 'shilalisababby',  // <-- lol
-    resave: true, 
+    resave: true,
     saveUninitialized: true
   }));
 
@@ -72,8 +70,11 @@ module.exports = function(app, config, passport) {
   app.use('/resources', express.static(config.root + '/public/resources' /*, {maxAge: 1000 * 60 * 60 * 24}*/));
 
   // Routes
-  require('./routes')(app, config, passport);
-
+  if (config.is_mongo) {
+    require(config.routes_dir)(app, config, passport);
+  } else {
+    require('./routes')(app, config, passport);
+  }
   // Lets handle errors. This should be the last middleware, before the 404 handler.
   app.use(function(err, req, res, next) {
     // treat as 404
@@ -83,8 +84,8 @@ module.exports = function(app, config, passport) {
       return next();
     }
 
-    if(err.message && err.message.indexOf('Unexpected') !== -1) {
-      res.json(400, {err: 'Malformed request: ' +err.message});
+    if (err.message && err.message.indexOf('Unexpected') !== -1) {
+      res.json(400, {err: 'Malformed request: ' + err.message});
       return;
     }
 
@@ -102,7 +103,7 @@ module.exports = function(app, config, passport) {
   app.use(function(req, res) { //
     res.status(404).render('404', {
       url: req.originalUrl,
-      error: 'Not found',
+      error: 'Not found'
     });
   });
 };
