@@ -80,23 +80,6 @@ module.exports = {
       });
   },
 
-  // Check if a User exists
-  exists: function(req, res) {
-    if (!req.body.username && !req.body.email) {
-      res.status(400).json({
-        QueryError: 'GET /exists must contain either a username, an email, or both'
-      });
-    }
-
-    User.findOne(req.body)
-      .then(function(result) {
-        res.json({exists: (result !== null)});
-      })
-      .catch(function(err) {
-        res.status(400).json(err);
-      });
-  },
-
   // Check if someone is currently logged in
   isAuthed: function(req, res, next) {
     process.nextTick(function() {

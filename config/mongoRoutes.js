@@ -20,7 +20,6 @@ module.exports = function(app, config, passport) {
       userController.isAuthed,
       userController.hasAccess('Admin'),
       userController.create)
-    .post('/exists', userController.exists)
     .get('/:user',
       userController.isAuthed,
       userController.show)
