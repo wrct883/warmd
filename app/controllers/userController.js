@@ -51,7 +51,7 @@ module.exports = {
     if (!req.userData) {
       res.status(400).json({
         QueryError: 'User with username + '
-      })
+      });
     }
     // A User should only be able to change their own password
     if (req.body.password && (req.userData.username !== req.user.username)) {
