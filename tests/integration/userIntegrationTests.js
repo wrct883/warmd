@@ -223,6 +223,11 @@ describe('The Users controller', function() {
           expect(res.body).to.have.property('username', 'test1');
           expect(res.body).to.have.property('email', 'test1@example.com');
           expect(res.body).to.not.have.property('password');
+          return user.get('/users/badTest')
+            .expect(404);
+        })
+        .then(function(res) {
+          expect(res.body).to.have.property('QueryError');
           done();
         })
         .catch(function(err) {
@@ -245,9 +250,8 @@ describe('The Users controller', function() {
         .then(function(res) {
           expect(res.body).to.have.property('username', 'test1');
           expect(res.body).to.have.property('exists', true);
-        })
-        .then(function(res) {
-          return user.get('/users/badUser?exists=true');
+          return user.get('/users/badUser?exists=true')
+            .expect(200);
         })
         .then(function(res) {
           expect(res.body).to.have.property('username', 'badUser');
@@ -279,6 +283,15 @@ describe('The Users controller', function() {
           expect(res.body).to.have.property('first_name', 'Test');
           expect(res.body).to.have.property('last_name', 'One');
           expect(res.body).to.not.have.property('password');
+          return user.put('/users/badUser')
+            .send({
+              first_name: 'Bad',
+              last_name: 'User'
+            })
+            .expect(404);
+        })
+        .then(function(res) {
+          expect(res.body).to.have.property('QueryError');
           done();
         })
         .catch(function(err) {
@@ -333,6 +346,11 @@ describe('The Users controller', function() {
         })
         .then(function(res) {
           expect(res.body).to.have.property('removedUser', 'test4');
+          return user.delete('/users/badTest')
+            .expect(404);
+        })
+        .then(function(res) {
+          expect(res.body).to.have.property('QueryError');
           done();
         })
         .catch(function(err) {

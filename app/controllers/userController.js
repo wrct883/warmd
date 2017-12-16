@@ -22,7 +22,7 @@ module.exports = {
       .then(function(user) {
         if (!user) {
           req.userData = {
-            error: true,
+            not_found: true,
             username: username
           };
         } else {
@@ -41,18 +41,27 @@ module.exports = {
     if (req.query && req.query.exists) {
       res.json({
         username: req.userData.username,
-        exists: req.userData.error === undefined
+        exists: req.userData.not_found === undefined
       });
-    } else res.json(req.userData);
+    }
+
+    if (req.userData.not_found) {
+      res.status(404).json({
+        QueryError: 'User with username ' +  req.userData.username + ' not found'
+      });
+    }
+
+    res.json(req.userData);
   },
 
   // Update a User
   update: function(req, res) {
-    if (!req.userData) {
-      res.status(400).json({
-        QueryError: 'User with username + '
+    if (req.userData.not_found) {
+      res.status(404).json({
+        QueryError: 'User with username ' +  req.userData.username + ' not found'
       });
     }
+
     // A User should only be able to change their own password
     if (req.body.password && (req.userData.username !== req.user.username)) {
       res.status(401).json({
@@ -71,6 +80,12 @@ module.exports = {
 
   // Delete a User
   delete: function(req, res) {
+    if (req.userData.not_found) {
+      res.status(404).json({
+        QueryError: 'User with username ' +  req.userData.username + ' not found'
+      });
+    }
+
     User.findOneAndRemove({username: req.userData.username})
       .then(function(removedUser) {
         res.json({removedUser: removedUser.username});
