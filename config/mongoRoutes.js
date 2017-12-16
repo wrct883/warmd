@@ -15,7 +15,7 @@ module.exports = function(app, config, passport) {
     .param('user', userController.load)
     .get('/',
       userController.isAuthed,
-      userController.all)
+      userController.find)
     .post('/',
       userController.isAuthed,
       userController.hasAccess('Admin'),

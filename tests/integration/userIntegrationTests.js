@@ -17,19 +17,26 @@ describe('The Users controller', function() {
     var testUser1 = new User({
       username: 'test1',
       password: 'secret1',
-      email: 'test1@example.com'
+      email: 'test1@example.com',
+      training_status: {
+        is_air_trained: true
+      }
     });
 
     var testUser2 = new User({
       username: 'test2',
       password: 'secret2',
-      email: 'test2@example.com'
+      email: 'test2@example.com',
+      dj_name: 'DJ Test 2'
     });
 
     var testUser3 = new User({
       username: 'test3',
       password: 'secret3',
-      email: 'test3@example.com'
+      email: 'test3@example.com',
+      first_name: 'Test',
+      last_name: 'Three',
+      auth_level: 'Exec'
     });
 
     admin.save()
@@ -194,10 +201,61 @@ describe('The Users controller', function() {
             .expect(200);
         })
         .then(function(res) {
-          expect(res.body).to.have.length(4);
+          expect(res.body).to.have.length(3);
           res.body.forEach(function(user) {
             expect(user).to.have.property('auth_level', 'None');
           });
+          done();
+        })
+        .catch(function(err) {
+          done(err);
+        });
+    });
+
+    it('should find users based on some query', function(done) {
+      var admin = request.agent(app);
+      admin.post('/auth')
+        .send({
+          username: 'admin',
+          password: 'adminSecret'
+        })
+        .expect(200)
+        .then(function(res) {
+          // Find all users that are air cleared
+          return admin.get('/users')
+            .send({
+              'training_status.is_air_trained': true
+            })
+            .expect(200);
+        })
+        .then(function(res) {
+          expect(res.body).to.have.length(1);
+          expect(res.body[0]).to.have.nested.property('training_status.is_air_trained', true);
+
+          // Find all users that have auth levels of 'Exec' or 'Admin'
+          return admin.get('/users')
+            .send({
+              'auth_level': {
+                '$in': ['Exec', 'Admin']
+              }
+            })
+            .expect(200);
+        })
+        .then(function(res) {
+          expect(res.body).to.have.length(2);
+          res.body.forEach(function(user) {
+            expect(user.auth_level).to.be.oneOf(['Exec', 'Admin']);
+          });
+
+          // Find all users with is_couch_director=true
+          // Should return 0 users
+          return admin.get('/users')
+            .send({
+              'is_couch_director': true
+            })
+            .expect(404);
+        })
+        .then(function(res) {
           done();
         })
         .catch(function(err) {

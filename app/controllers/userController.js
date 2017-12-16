@@ -123,10 +123,10 @@ module.exports = {
     };
   },
 
-  // Show all Users
+  // Find Users
   // If called with pending=true, show all pending Users
-  all: function(req, res) {
-    var options = {};
+  find: function(req, res) {
+    var options = req.body;
     if (req.query && req.query.pending) {
       // Show only pending users
       options.auth_level = 'None';
@@ -134,6 +134,11 @@ module.exports = {
 
     User.find(options)
       .then(function(users) {
+        if (users.length === 0) {
+          res.status(404).json({
+            QueryError: 'No users found matching that query'
+          });
+        }
         res.json(users);
       })
       .catch(function(err) {
