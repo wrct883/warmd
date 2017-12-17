@@ -7,7 +7,10 @@ module.exports = {
   // Create a new Program
   create: function(req, res) {
     // Keep track of when the show was made
-    req.body.created_at = new Date(req.body.created_at) || new Date(Date.now());
+    req.body.created_at =
+      req.body.created_at
+        ? new Date(req.body.created_at)
+        : new Date(Date.now());
     // Generate promo code if one is not provided
     if (!req.body.promo_code) {
       var promoSemester = findSemester(req.body.created_at);
@@ -39,6 +42,54 @@ module.exports = {
           res.status(400).json(err);
         });
     }
+  },
+
+  // Load a Program from the database
+  load: function(req, res, next, id) {
+    Program.findOne({_id: id})
+      .then(function(program) {
+        if (!program) {
+          req.programData = {
+            not_found: true,
+            _id: id
+          };
+        } else {
+          req.programData = program;
+        }
+        next();
+      })
+      .catch(function(err) {
+        next(err);
+      });
+  },
+
+  // Display a Program that was loaded
+  show: function(req, res) {
+    if (req.programData.not_found) {
+      res.status(404).json({
+        QueryError: 'Program with ID ' + req.programData._id + ' not found'
+      });
+    }
+
+    res.json(req.programData);
+  },
+
+  // Find Programs
+  find: function(req, res) {
+    var options = req.body;
+
+    Program.find(options)
+      .then(function(programs) {
+        if (programs.length === 0) {
+          res.status(404).json({
+            QueryError: 'No programs found matching that query'
+          });
+        }
+        res.json(programs);
+      })
+      .catch(function(err) {
+        res.status(500).json(err);
+      });
   }
 };
 

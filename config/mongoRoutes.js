@@ -34,8 +34,15 @@ module.exports = function(app, config, passport) {
 
   // Program routes
   var programRouter = new express.Router()
+    .param('program', programController.load)
+    .get('/',
+      userController.isAuthed,
+      programController.find)
     .post('/',
       userController.isAuthed,
-      programController.create);
+      programController.create)
+    .get('/:program',
+      userController.isAuthed,
+      programController.show);
   app.use('/programs', programRouter);
 };

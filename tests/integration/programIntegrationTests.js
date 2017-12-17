@@ -125,6 +125,68 @@ describe('The Programs controller', function() {
           done(err);
         });
     });
+
+    it('should retrieve all Programs with a GET request', function(done) {
+      var admin = request.agent(app);
+      admin.post('/auth')
+        .send({
+          username: 'admin',
+          password: 'adminSecret'
+        })
+        .expect(200)
+        .then(function(res) {
+          return admin.get('/programs')
+            .expect(200);
+        })
+        .then(function(res) {
+          expect(res.body).has.length(3);
+          done();
+        })
+        .catch(function(err) {
+          done(err);
+        });
+    });
+  });
+
+  describe('/programs/:program', function() {
+    it('should retrieve a Program with a GET request', function(done) {
+      var admin = request.agent(app);
+      admin.post('/auth')
+        .send({
+          username: 'admin',
+          password: 'adminSecret'
+        })
+        .expect(200)
+        .then(function(res) {
+          return admin.post('/programs')
+            .send({
+              name: 'ebony spectrum',
+              host: 'admin',
+              start_time: {
+                day: 'Wed',
+                hour: '17:00'
+              },
+              end_time: {
+                day: 'Wed',
+                hour: '18:00'
+              },
+              type: 'pa'
+            })
+            .expect(201);
+        })
+        .then(function(res) {
+          var id = res.body._id;
+          return admin.get('/programs/' + id)
+            .expect(200);
+        })
+        .then(function(res) {
+          expect(res.body).to.have.property('name', 'ebony spectrum');
+          done();
+        })
+        .catch(function(err) {
+          done(err);
+        });
+    });
   });
 
   after(function(done) {
