@@ -1,6 +1,7 @@
 'use strict';
 
 var userController = require('../app/controllers/userController'),
+    programController = require('../app/controllers/programController'),
     express = require('express');
 
 module.exports = function(app, config, passport) {
@@ -30,4 +31,11 @@ module.exports = function(app, config, passport) {
       userController.isAuthed,
       userController.delete);
   app.use('/users', userRouter);
+
+  // Program routes
+  var programRouter = new express.Router()
+    .post('/',
+      userController.isAuthed,
+      programController.create);
+  app.use('/programs', programRouter);
 };
