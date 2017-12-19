@@ -146,6 +146,49 @@ describe('The Programs controller', function() {
           done(err);
         });
     });
+
+    it('should retrieve all active programs', function(done) {
+      var admin = request.agent(app);
+      admin.post('/auth')
+        .send({
+          username: 'admin',
+          password: 'adminSecret'
+        })
+        .expect(200)
+        .then(function(res) {
+          // Add a new inactive program that shouldn't get retrieved later
+          return admin.post('/programs')
+            .send({
+              name: 'Inactivity',
+              host: 'Admin',
+              start_time: {
+                day: 'Fri',
+                hour: '18:00'
+              },
+              end_time: {
+                day: 'Sat',
+                hour: '00:00'
+              },
+              is_active: 'false',
+              type: 'show'
+            })
+            .expect(201);
+        })
+        .then(function(res) {
+          return admin.get('/programs?active=true')
+            .expect(200);
+        })
+        .then(function(res) {
+          expect(res.body).has.length(3);
+          res.body.forEach(function(program) {
+            expect(program).to.have.property('is_active', true);
+          });
+          done();
+        })
+        .catch(function(err) {
+          done(err);
+        });
+    });
   });
 
   describe('/programs/:program', function() {

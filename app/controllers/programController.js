@@ -78,6 +78,11 @@ module.exports = {
   find: function(req, res) {
     var options = req.body;
 
+    if (req.query && req.query.active) {
+      // Show only active shows
+      options.is_active = true;
+    }
+
     Program.find(options)
       .then(function(programs) {
         if (programs.length === 0) {
