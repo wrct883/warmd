@@ -43,6 +43,12 @@ module.exports = function(app, config, passport) {
       programController.create)
     .get('/:program',
       userController.isAuthed,
-      programController.show);
+      programController.show)
+    .put('/:program',
+      userController.isAuthed,
+      programController.update)
+    .delete('/:program',
+      userController.isAuthed,
+      programController.delete);
   app.use('/programs', programRouter);
 };

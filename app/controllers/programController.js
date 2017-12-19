@@ -74,6 +74,40 @@ module.exports = {
     res.json(req.programData);
   },
 
+  // Update a Program
+  update: function(req, res) {
+    if (req.programData.not_found) {
+      res.status(404).json({
+        QueryError: 'Program with id ' + req.programData._id + ' not found'
+      });
+    }
+
+    Program.findOneAndUpdate({_id: req.programData._id}, req.body, {new: true})
+      .then(function(updatedProgram) {
+        res.json(updatedProgram);
+      })
+      .catch(function(err) {
+        res.status(400).json(err);
+      });
+  },
+
+  // Delete a Program
+  delete: function(req, res) {
+    if (req.programData.not_found) {
+      res.status(404).json({
+        QueryError: 'Program with id ' + req.programData._id + ' not found'
+      });
+    }
+
+    Program.findOneAndRemove({_id: req.programData._id})
+      .then(function(removedProgram) {
+        res.json({removedProgram: removedProgram._id});
+      })
+      .catch(function(err) {
+        res.status(500).json(err);
+      });
+  },
+
   // Find Programs
   find: function(req, res) {
     var options = req.body;

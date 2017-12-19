@@ -160,7 +160,7 @@ describe('The Programs controller', function() {
           return admin.post('/programs')
             .send({
               name: 'Inactivity',
-              host: 'Admin',
+              host: 'admin',
               start_time: {
                 day: 'Fri',
                 hour: '18:00'
@@ -224,6 +224,89 @@ describe('The Programs controller', function() {
         })
         .then(function(res) {
           expect(res.body).to.have.property('name', 'ebony spectrum');
+          done();
+        })
+        .catch(function(err) {
+          done(err);
+        });
+    });
+
+    it('should update a Program with a PUT request', function(done) {
+      var admin = request.agent(app);
+      admin.post('/auth')
+        .send({
+          username: 'admin',
+          password: 'adminSecret'
+        })
+        .expect(200)
+        .then(function(res) {
+          return admin.post('/programs')
+            .send({
+              name: 'Update Show',
+              host: 'admin',
+              start_time: {
+                day: 'Sat',
+                hour: '10:00'
+              },
+              end_time: {
+                day: 'Sat',
+                hour: '11:00'
+              },
+              type: 'show'
+            })
+            .expect(201);
+        })
+        .then(function(res) {
+          var id = res.body._id;
+          return admin.put('/programs/' + id)
+            // Change the show's name
+            .send({
+              name: 'New Update Show'
+            })
+            .expect(200);
+        })
+        .then(function(res) {
+          expect(res.body).to.have.property('name', 'New Update Show');
+          done();
+        })
+        .catch(function(err) {
+          done(err);
+        });
+    });
+
+    it('should delete a Program with a DELETE request', function(done) {
+      var admin = request.agent(app);
+      admin.post('/auth')
+        .send({
+          username: 'admin',
+          password: 'adminSecret'
+        })
+        .expect(200)
+        .then(function(res) {
+          return admin.post('/programs')
+            .send({
+              name: 'Chopping Block',
+              host: 'admin',
+              start_time: {
+                day: 'Sun',
+                hour: '10:00'
+              },
+              end_time: {
+                day: 'Sun',
+                hour: '10:00'
+              },
+              type: 'show'
+            })
+            .expect(201);
+        })
+        .then(function(res) {
+          var id = res.body._id;
+          return admin.delete('/programs/' + id)
+            // Delete the Chopping Block
+            .expect(200);
+        })
+        .then(function(res) {
+          expect(res.body).to.have.property('removedProgram');
           done();
         })
         .catch(function(err) {
