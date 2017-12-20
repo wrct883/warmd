@@ -1,6 +1,7 @@
 'use strict';
 
 var userController = require('../app/controllers/userController'),
+    programController = require('../app/controllers/programController'),
     express = require('express');
 
 module.exports = function(app, config, passport) {
@@ -30,4 +31,24 @@ module.exports = function(app, config, passport) {
       userController.isAuthed,
       userController.delete);
   app.use('/users', userRouter);
+
+  // Program routes
+  var programRouter = new express.Router()
+    .param('program', programController.load)
+    .get('/',
+      userController.isAuthed,
+      programController.find)
+    .post('/',
+      userController.isAuthed,
+      programController.create)
+    .get('/:program',
+      userController.isAuthed,
+      programController.show)
+    .put('/:program',
+      userController.isAuthed,
+      programController.update)
+    .delete('/:program',
+      userController.isAuthed,
+      programController.delete);
+  app.use('/programs', programRouter);
 };

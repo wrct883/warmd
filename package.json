@@ -59,6 +59,7 @@
     "passport-local": "~1.0.0",
     "request": "~2.36.0",
     "request-json": "~0.4.10",
+    "shortid": "^2.2.8",
     "winston": "~0.7.3",
     "winston-mail": "~0.2.7"
   },
