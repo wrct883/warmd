@@ -55,11 +55,21 @@ module.exports = function(app, config, passport) {
 
   // Artist routes
   var artistRouter = new express.Router()
+    .param('artist', artistController.load)
     .get('/',
       userController.isAuthed,
       artistController.find)
     .post('/',
       userController.isAuthed,
-      artistController.create);
+      artistController.create)
+    .get('/:artist',
+      userController.isAuthed,
+      artistController.show)
+    .put('/:artist',
+      userController.isAuthed,
+      artistController.update)
+    .delete('/:artist',
+      userController.isAuthed,
+      artistController.delete);
   app.use('/artists', artistRouter);
 };

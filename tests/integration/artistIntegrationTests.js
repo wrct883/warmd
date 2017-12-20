@@ -33,7 +33,7 @@ describe('The Artists controller', function() {
       });
   });
 
-  describe.only('/artists', function() {
+  describe('/artists', function() {
     it('should create a new Artist with a POST request', function(done) {
       var admin = request.agent(app);
       admin.post('/auth')
@@ -75,6 +75,103 @@ describe('The Artists controller', function() {
         })
         .then(function(res) {
           expect(res.body).has.length(2);
+          done();
+        })
+        .catch(function(err) {
+          done(err);
+        });
+    });
+  });
+
+  describe('/artists/:artist', function() {
+    it('should retrieve an Artist with a GET request', function(done) {
+      var admin = request.agent(app);
+      admin.post('/auth')
+        .send({
+          username: 'admin',
+          password: 'adminSecret'
+        })
+        .expect(200)
+        .then(function(res) {
+          return admin.post('/artists')
+            .send({
+              name: 'The Rolling Stones',
+              short_name: 'rollingstones'
+            })
+            .expect(201);
+        })
+        .then(function(res) {
+          var id = res.body._id;
+          return admin.get('/artists/' + id)
+            .expect(200);
+        })
+        .then(function(res) {
+          expect(res.body).to.have.property('name', 'The Rolling Stones');
+          done();
+        })
+        .catch(function(err) {
+          done(err);
+        });
+    });
+
+    it('should update an Artist with a PUT request', function(done) {
+      var admin = request.agent(app);
+      admin.post('/auth')
+        .send({
+          username: 'admin',
+          password: 'adminSecret'
+        })
+        .expect(200)
+        .then(function(res) {
+          return admin.post('/artists')
+            .send({
+              name: 'Jay Z',
+              short_name: 'jayz'
+            })
+            .expect(201);
+        })
+        .then(function(res) {
+          var id = res.body._id;
+          return admin.put('/artists/' + id)
+            // Jay brought back the hyphen in June 2017
+            .send({
+              name: 'JAY-Z'
+            })
+            .expect(200);
+        })
+        .then(function(res) {
+          expect(res.body).to.have.property('name', 'JAY-Z');
+          done();
+        })
+        .catch(function(err) {
+          done(err);
+        });
+    });
+
+    it('should delete an Artist with a DELETE request', function(done) {
+      var admin = request.agent(app);
+      admin.post('/auth')
+        .send({
+          username: 'admin',
+          password: 'adminSecret'
+        })
+        .expect(200)
+        .then(function(res) {
+          return admin.post('/artists')
+            .send({
+              name: 'Iggy Azalea',
+              short_name: 'iggyazalea'
+            })
+            .expect(201);
+        })
+        .then(function(res) {
+          var id = res.body._id;
+          return admin.delete('/artists/' + id)
+            // No I-G-G-Y in the station, please
+            .expect(200);
+        })
+        .then(function(res) {
+          expect(res.body).to.have.property('removedArtist');
           done();
         })
         .catch(function(err) {
