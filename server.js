@@ -65,6 +65,7 @@ if (!config.is_mongo) {
   // Register schemas
   require('./app/schema/userModel');
   require('./app/schema/programModel');
+  require('./app/schema/artistModel');
 
   mongoose.Promise = global.Promise;
   mongoose.connect('mongodb://localhost/warmd', {useMongoClient: true});
