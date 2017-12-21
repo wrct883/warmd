@@ -11,14 +11,17 @@ var ArtistSchema = new Schema({
   },
   name: {
     type: String,
+    trim: true,
     required: true
   },
   short_name: {
     type: String,
+    trim: true,
     required: true
   },
   comment: {
-    type: String
+    type: String,
+    trim: true
   }
 });
 
