@@ -17,7 +17,7 @@ describe('The Artists controller', function() {
 
     var testArtist = new Artist({
       name: 'A Tribe Called Quest',
-      short_name: 'atribecalledquest'
+      alpha_name: 'atribecalledquest'
     });
 
     admin.save()
@@ -46,14 +46,14 @@ describe('The Artists controller', function() {
           return admin.post('/artists')
             .send({
               name: 'Kanye West',
-              short_name: 'kanyewest'
+              alpha_name: 'kanyewest'
             })
             .expect(201);
         })
         .then(function(res) {
           expect(res.body).to.have.property('_id');
           expect(res.body).to.have.property('name', 'Kanye West');
-          expect(res.body).to.have.property('short_name', 'kanyewest');
+          expect(res.body).to.have.property('alpha_name', 'kanyewest');
           done();
         })
         .catch(function(err) {
@@ -96,7 +96,7 @@ describe('The Artists controller', function() {
           return admin.post('/artists')
             .send({
               name: 'The Rolling Stones',
-              short_name: 'rollingstones'
+              alpha_name: 'rollingstones'
             })
             .expect(201);
         })
@@ -126,7 +126,7 @@ describe('The Artists controller', function() {
           return admin.post('/artists')
             .send({
               name: 'Jay Z',
-              short_name: 'jayz'
+              alpha_name: 'jayz'
             })
             .expect(201);
         })
@@ -160,7 +160,7 @@ describe('The Artists controller', function() {
           return admin.post('/artists')
             .send({
               name: 'Iggy Azalea',
-              short_name: 'iggyazalea'
+              alpha_name: 'iggyazalea'
             })
             .expect(201);
         })

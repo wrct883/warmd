@@ -15,7 +15,7 @@ var ArtistSchema = new Schema({
     trim: true,
     required: true
   },
-  short_name: {
+  alpha_name: {
     type: String,
     trim: true
   },
@@ -25,11 +25,11 @@ var ArtistSchema = new Schema({
   }
 });
 
-// Auto generate short name if one is not provided
+// Auto generate alpha name if one is not provided
 ArtistSchema.pre('save', function(next) {
   var artist = this;
-  if (!artist.short_name) {
-    artist.short_name = generateShortName(artist.name);
+  if (!artist.alpha_name) {
+    artist.alpha_name = generateAlphaName(artist.name);
   }
   next();
 });
@@ -37,12 +37,12 @@ ArtistSchema.pre('save', function(next) {
 module.exports = mongoose.model('Artist', ArtistSchema);
 
 // Helper functions
-// Given an artist name, try to auto generate a shortname
+// Given an artist name, try to auto generate an alphaname
 // Things this function does NOT account for
 // - Alphabetizing artists by their last name rather than their first
 // - Alphebetizing bands/artists with abbreviations by spelling out the abbreviation (e.g. 'Dr.', 'St.')
 // - Alphabetizing numbers with decimals
-var generateShortName = function(artistName) {
+var generateAlphaName = function(artistName) {
   return artistName
     .toLowerCase()
     .replace(/(\d)/g, function(match, offset, string) {

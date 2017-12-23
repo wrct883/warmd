@@ -10,7 +10,7 @@ describe('The Artist Model', function() {
     done();
   });
 
-  it('should automatically generate short names', function(done) {
+  it('should automatically generate alpha names', function(done) {
     // Normal name
     var artist1 = new Artist({
       name: 'A Tribe Called Quest'
@@ -38,28 +38,28 @@ describe('The Artist Model', function() {
 
     artist1.save()
       .then(function(res) {
-        // Short name should just be the regular name, lowercase and one word
-        expect(res).to.have.property('short_name', 'atribecalledquest');
+        // Alpha name should just be the regular name, lowercase and one word
+        expect(res).to.have.property('alpha_name', 'atribecalledquest');
         return artist2.save();
       })
       .then(function(res) {
-        // Short name should not include the leading 'the'
-        expect(res).to.have.property('short_name', 'rollingstones');
+        // Alpha name should not include the leading 'the'
+        expect(res).to.have.property('alpha_name', 'rollingstones');
         return artist3.save();
       })
       .then(function(res) {
-        // Short name should spell out the numeral
-        expect(res).to.have.property('short_name', 'twopac');
+        // Alpha name should spell out the numeral
+        expect(res).to.have.property('alpha_name', 'twopac');
         return artist4.save();
       })
       .then(function(res) {
-        // Short name should change '&' to 'and'
-        expect(res).to.have.property('short_name', 'josieandthepussycats');
+        // Alpha name should change '&' to 'and'
+        expect(res).to.have.property('alpha_name', 'josieandthepussycats');
         return artist5.save();
       })
       .then(function(res) {
-        // Short name should remove punctuation
-        expect(res).to.have.property('short_name', 'pdiddy');
+        // Alpha name should remove punctuation
+        expect(res).to.have.property('alpha_name', 'pdiddy');
         done();
       })
       .catch(function(err) {
