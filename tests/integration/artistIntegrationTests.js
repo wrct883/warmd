@@ -28,8 +28,7 @@ describe('The Artists controller', function() {
         done();
       })
       .catch(function(err) {
-        console.log(err);
-        done();
+        done(err);
       });
   });
 
