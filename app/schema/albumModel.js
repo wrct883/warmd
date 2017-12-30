@@ -10,7 +10,7 @@ var NestedArtistSchema = new Schema({
     trim: true,
     required: true
   },
-  id: {
+  _id: {
     type: String,
     required: true
   }
