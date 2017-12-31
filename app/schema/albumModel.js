@@ -26,7 +26,7 @@ var AlbumSchema = new Schema({
     trim: true,
     required: true
   },
-  artist: {
+  artists: {
     type: [NestedArtistSchema],
     required: true
   },
