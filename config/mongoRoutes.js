@@ -3,6 +3,7 @@
 var userController = require('../app/controllers/userController'),
     programController = require('../app/controllers/programController'),
     artistController = require('../app/controllers/artistController'),
+    albumController = require('../app/controllers/albumController'),
     express = require('express');
 
 module.exports = function(app, config, passport) {
@@ -72,4 +73,24 @@ module.exports = function(app, config, passport) {
       userController.isAuthed,
       artistController.delete);
   app.use('/artists', artistRouter);
+
+  // Album routes
+  var albumRouter = new express.Router()
+    .param('album', albumController.load)
+    .get('/',
+      userController.isAuthed,
+      albumController.find)
+    .post('/',
+      userController.isAuthed,
+      albumController.create)
+    .get('/:album',
+      userController.isAuthed,
+      albumController.show)
+    .put('/:album',
+      userController.isAuthed,
+      albumController.update)
+    .delete('/:album',
+      userController.isAuthed,
+      albumController.delete);
+  app.use('/albums', albumRouter);
 };
