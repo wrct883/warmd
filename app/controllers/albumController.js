@@ -46,7 +46,8 @@ module.exports = {
   show: function(req, res) {
     if (req.albumData.not_found) {
       res.status(404).json({
-        QueryError: 'Album with ID ' + req.albumData._id + ' not found'
+        error: 'QueryError',
+        message: 'Album with ID ' + req.albumData._id + ' not found'
       });
     }
 
@@ -57,7 +58,8 @@ module.exports = {
   update: function(req, res) {
     if (req.albumData.not_found) {
       res.status(404).json({
-        QueryError: 'Album with id ' + req.albumData._id + ' not found'
+        error: 'QueryError',
+        message: 'Album with id ' + req.albumData._id + ' not found'
       });
     }
 
@@ -70,7 +72,7 @@ module.exports = {
         if (err.code && err.code === 11000) {
           res.status(400).json({
             error: 'UpdateError',
-            UpdateError: 'Duplicate Key Error'
+            message: 'Duplicate Key Error'
           });
         }
         res.status(400).json(err);
@@ -81,7 +83,8 @@ module.exports = {
   delete: function(req, res) {
     if (req.albumData.not_found) {
       res.status(404).json({
-        QueryError: 'Album with id ' + req.albumData._id + ' not found'
+        error: 'QueryError',
+        message: 'Album with id ' + req.albumData._id + ' not found'
       });
     }
 
@@ -102,7 +105,8 @@ module.exports = {
       .then(function(albums) {
         if (albums.length === 0) {
           res.status(404).json({
-            QueryError: 'No albums found matching that query'
+            error: 'QueryError',
+            message: 'No albums found matching that query'
           });
         }
         res.json(albums);
