@@ -63,5 +63,10 @@ var AlbumSchema = new Schema({
     type: String
   }
 });
+AlbumSchema.index({
+  'name': 1,
+  'artists.name': 1,
+  'artists._id': 1
+}, {unique: true});
 
 module.exports = mongoose.model('Album', AlbumSchema);

@@ -98,6 +98,46 @@ describe('The Albums controller', function() {
       ]);
     });
 
+    it('should not allow two copies of the same album', function() {
+      var admin = request.agent(app);
+      var result = admin.post('/auth')
+        .send({
+          username: 'admin',
+          password: 'adminSecret'
+        })
+        .expect(200)
+        .then(function(res) {
+          // Get Kanye from the db
+          return admin.get('/artists')
+            .send({
+              name: 'Kanye West'
+            })
+            .expect(200);
+        })
+        .then(function(res) {
+          return admin.post('/albums')
+            .send({
+              // Inserting the same
+              name: 'College Dropout',
+              artists: [
+                {
+                  name: res.body[0].name,
+                  _id: res.body[0]._id
+                }
+              ]
+            })
+            .expect(400);
+        })
+        .then(function(res) {
+          return res.body;
+        });
+
+      return Promise.all([
+        expect(result).to.eventually.have.property('error', 'InsertionError'),
+        expect(result).to.eventually.have.property('message', 'Duplicate Key Error')
+      ]);
+    });
+
     it('should retrieve all Albums with a GET request', function() {
       var admin = request.agent(app);
       var result = admin.post('/auth')
@@ -113,6 +153,7 @@ describe('The Albums controller', function() {
         .then(function(res) {
           return res.body;
         });
+
       return Promise.all([
         expect(result).to.eventually.have.length(2)
       ]);

@@ -12,6 +12,13 @@ module.exports = {
         res.status(201).json(album);
       })
       .catch(function(err) {
+        // Duplicate Key Error
+        if (err.code && err.code === 11000) {
+          res.status(400).json({
+            error: 'InsertionError',
+            message: 'Duplicate Key Error'
+          });
+        }
         res.status(400).json(err);
       });
   },
@@ -59,6 +66,13 @@ module.exports = {
         res.json(updatedAlbum);
       })
       .catch(function(err) {
+        // Duplicate Key Error
+        if (err.code && err.code === 11000) {
+          res.status(400).json({
+            error: 'UpdateError',
+            UpdateError: 'Duplicate Key Error'
+          });
+        }
         res.status(400).json(err);
       });
   },
