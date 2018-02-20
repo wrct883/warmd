@@ -15,7 +15,7 @@ var PlaylistSchema = new Schema({
   },
   program: {
     type: String,
-    requited: true
+    required: true
   },
   start_time: {
     type: Date,
