@@ -5,6 +5,7 @@ var userController = require('../app/v1/controllers/userController'),
     artistController = require('../app/v1/controllers/artistController'),
     albumController = require('../app/v1/controllers/albumController'),
     reviewController = require('../app/v1/controllers/reviewController'),
+    playlistController = require('../app/controllers/playlistController'),
     express = require('express');
 
 module.exports = function(app, config, passport) {
@@ -114,4 +115,24 @@ module.exports = function(app, config, passport) {
       userController.isAuthed,
       reviewController.delete);
   app.use('/v1/reviews', reviewRouter);
+
+  // Playlist routes
+  var playlistRouter = new express.Router()
+    .param('playlist', playlistController.load)
+    .get('/',
+      userController.isAuthed,
+      playlistController.find)
+    .post('/',
+      userController.isAuthed,
+      playlistController.create)
+    .get('/:playlist',
+      userController.isAuthed,
+      playlistController.show)
+    .put('/:playlist',
+      userController.isAuthed,
+      playlistController.update)
+    .delete('/:playlist',
+      userController.isAuthed,
+      playlistController.delete);
+  app.use('/playlists', playlistRouter);
 };
