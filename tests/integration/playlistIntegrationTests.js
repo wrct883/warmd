@@ -26,7 +26,7 @@ describe('The Playlsit controller', function() {
       });
   });
 
-  describe.only('/playlists', function() {
+  describe('/playlists', function() {
     it('should create a new Playlist with a POST request', function() {
       var admin = request.agent(app);
       var result = admin.post('/auth')
