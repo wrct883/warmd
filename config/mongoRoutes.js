@@ -4,6 +4,7 @@ var userController = require('../app/controllers/userController'),
     programController = require('../app/controllers/programController'),
     artistController = require('../app/controllers/artistController'),
     albumController = require('../app/controllers/albumController'),
+    reviewController = require('../app/controllers/reviewController'),
     express = require('express');
 
 module.exports = function(app, config, passport) {
