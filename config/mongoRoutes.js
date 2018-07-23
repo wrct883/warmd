@@ -93,4 +93,24 @@ module.exports = function(app, config, passport) {
       userController.isAuthed,
       albumController.delete);
   app.use('/albums', albumRouter);
+
+  // Review routes
+  var reviewRouter = new express.Router()
+    .param('review', reviewController.load)
+    .get('/',
+      userController.isAuthed,
+      reviewController.find)
+    .post('/',
+      userController.isAuthed,
+      reviewController.create)
+    .get('/:review',
+      userController.isAuthed,
+      reviewController.show)
+    .put('/:review',
+      userController.isAuthed,
+      reviewController.update)
+    .delete('/:review',
+      userController.isAuthed,
+      reviewController.delete);
+  app.use('/reviews', reviewRouter);
 };
