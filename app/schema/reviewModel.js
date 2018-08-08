@@ -17,8 +17,8 @@ var ReviewSchema = new Schema({
   },
   date: {
     type: Date,
-    required: true,
-    default: new Date()
+    default: Date.now,
+    required: true
   },
   album_id: {
     type: String,
@@ -31,5 +31,9 @@ var ReviewSchema = new Schema({
     required: true
   }
 });
+ReviewSchema.index({
+  'username': 1,
+  'album_id': 1
+}, {unique: true});
 
 module.exports = mongoose.model('Review', ReviewSchema);

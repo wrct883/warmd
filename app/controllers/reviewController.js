@@ -84,7 +84,7 @@ module.exports = {
     if (req.reviewData.not_found) {
       res.status(404).json({
         error: 'QueryError',
-        message: 'Album with id ' + req.reviewData._id + ' not found'
+        message: 'Review with id ' + req.reviewData._id + ' not found'
       });
     }
 
