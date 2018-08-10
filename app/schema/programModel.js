@@ -15,8 +15,10 @@ var ProgramSchema = new Schema({
     required: true
   },
   hosts: {
-    type: [String],
-    trim: true,
+    type: [{
+      type: String,
+      trim: true
+    }],
     required: true
   },
   start_time: {
