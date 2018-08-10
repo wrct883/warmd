@@ -280,7 +280,7 @@ describe('The Reviews controller', function() {
         .then(function(res) {
           var id = res.body[0]._id;
           return admin.delete('/reviews/' + id)
-            // Delete the Blueprint
+            // Delete Late Registration review 
             .expect(200);
         })
         .then(function(res) {
