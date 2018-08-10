@@ -26,10 +26,6 @@ describe('The Reviews controller', function() {
       alpha_name: 'westkanye'
     });
 
-    var jayz = new Artist({
-      name: 'JAY-Z'
-    });
-
     admin.save()
       .then(function() {
         return kanye.save();
@@ -53,9 +49,6 @@ describe('The Reviews controller', function() {
           review: "This album was so good actually amazing and I loved it. Kanye west is a genius and so smart."
         });
         testReview.save();
-      })
-      .then(function() {
-        return jayz.save();
       })
       .then(function() {
         done();
@@ -194,7 +187,6 @@ describe('The Reviews controller', function() {
 
     it('should update a Review with a PUT request', function() {
       var kanye = {};
-      var jayz = {};
       var admin = request.agent(app);
       var result = admin.post('/auth')
         .send({
