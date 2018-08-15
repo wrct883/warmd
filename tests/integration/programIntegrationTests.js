@@ -15,6 +15,13 @@ describe('The Programs controller', function() {
       auth_level: 'Admin'
     });
 
+    var user = new User({
+      username: 'user',
+      password: 'userSecret',
+      email: 'user@example.com',
+      auth_level: 'Admin'
+    });
+
     admin.save()
       .then(function() {
         done();
@@ -38,7 +45,7 @@ describe('The Programs controller', function() {
           return admin.post('/programs')
             .send({
               name: 'Happy Hour',
-              host: 'admin',
+              hosts: ['admin', 'user'],
               start_time: {
                 day: 'Mon',
                 hour: '17:00'
@@ -56,7 +63,7 @@ describe('The Programs controller', function() {
         })
         .then(function(res) {
           expect(res.body).to.have.property('name', 'Happy Hour');
-          expect(res.body).to.have.property('host', 'admin');
+          expect(res.body).to.have.property('hosts').that.includes('admin','user');
           expect(res.body).to.have.property('type', 'show');
           expect(res.body).to.have.nested.property('start_time.day', 'Mon');
           expect(res.body).to.have.nested.property('end_time.day', 'Mon');
@@ -83,7 +90,7 @@ describe('The Programs controller', function() {
           return admin.post('/programs')
             .send({
               name: 'Happier Hour 2016',
-              host: 'admin',
+              hosts: ['admin'],
               start_time: {
                 day: 'Tue',
                 hour: '17:00'
@@ -102,7 +109,7 @@ describe('The Programs controller', function() {
           return admin.post('/programs')
             .send({
               name: 'Nappiest Hour 2016',
-              host: 'admin',
+              hosts: ['admin'],
               start_time: {
                 day: 'Tue',
                 hour: '20:00'
@@ -160,7 +167,7 @@ describe('The Programs controller', function() {
           return admin.post('/programs')
             .send({
               name: 'Inactivity',
-              host: 'admin',
+              hosts: ['admin'],
               start_time: {
                 day: 'Fri',
                 hour: '18:00'
@@ -204,7 +211,7 @@ describe('The Programs controller', function() {
           return admin.post('/programs')
             .send({
               name: 'ebony spectrum',
-              host: 'admin',
+              hosts: ['admin'],
               start_time: {
                 day: 'Wed',
                 hour: '17:00'
@@ -243,7 +250,7 @@ describe('The Programs controller', function() {
           return admin.post('/programs')
             .send({
               name: 'Update Show',
-              host: 'admin',
+              hosts: ['admin'],
               start_time: {
                 day: 'Sat',
                 hour: '10:00'
@@ -286,7 +293,7 @@ describe('The Programs controller', function() {
           return admin.post('/programs')
             .send({
               name: 'Chopping Block',
-              host: 'admin',
+              hosts: ['admin'],
               start_time: {
                 day: 'Sun',
                 hour: '10:00'
