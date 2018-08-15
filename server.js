@@ -67,6 +67,7 @@ if (!config.is_mongo) {
   require('./app/schema/programModel');
   require('./app/schema/artistModel');
   require('./app/schema/albumModel');
+  require('./app/schema/reviewModel');
 
   mongoose.Promise = global.Promise;
   mongoose.connect('mongodb://localhost/warmd', {useMongoClient: true});
