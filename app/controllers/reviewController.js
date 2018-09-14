@@ -45,7 +45,7 @@ module.exports = {
   // Display a Review that was loaded
   show: function(req, res) {
     if (req.reviewData.not_found) {
-      res.status(404).json({
+      return res.status(404).json({
         error: 'QueryError',
         message: 'Review with ID ' + req.reviewData._id + ' not found'
       });
@@ -57,7 +57,7 @@ module.exports = {
   // Update a Review
   update: function(req, res) {
     if (req.reviewData.not_found) {
-      res.status(404).json({
+      return res.status(404).json({
         error: 'QueryError',
         message: 'Review with id ' + req.reviewData._id + ' not found'
       });
@@ -82,7 +82,7 @@ module.exports = {
   // Delete a Review
   delete: function(req, res) {
     if (req.reviewData.not_found) {
-      res.status(404).json({
+      return res.status(404).json({
         error: 'QueryError',
         message: 'Review with id ' + req.reviewData._id + ' not found'
       });
@@ -104,7 +104,7 @@ module.exports = {
     Review.find(options)
       .then(function(reviews) {
         if (reviews.length === 0) {
-          res.status(404).json({
+          return res.status(404).json({
             error: 'QueryError',
             message: 'No reviews found matching that query'
           });

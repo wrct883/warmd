@@ -14,7 +14,7 @@ module.exports = {
       .catch(function(err) {
         // Duplicate Key Error
         if (err.code && err.code === 11000) {
-          res.status(400).json({
+          return res.status(400).json({
             error: 'InsertionError',
             message: 'Duplicate Key Error'
           });
@@ -45,7 +45,7 @@ module.exports = {
   // Display a Album that was loaded
   show: function(req, res) {
     if (req.albumData.not_found) {
-      res.status(404).json({
+      return res.status(404).json({
         error: 'QueryError',
         message: 'Album with ID ' + req.albumData._id + ' not found'
       });
@@ -57,7 +57,7 @@ module.exports = {
   // Update a Album
   update: function(req, res) {
     if (req.albumData.not_found) {
-      res.status(404).json({
+      return res.status(404).json({
         error: 'QueryError',
         message: 'Album with id ' + req.albumData._id + ' not found'
       });
@@ -70,7 +70,7 @@ module.exports = {
       .catch(function(err) {
         // Duplicate Key Error
         if (err.code && err.code === 11000) {
-          res.status(400).json({
+          return res.status(400).json({
             error: 'UpdateError',
             message: 'Duplicate Key Error'
           });
@@ -82,7 +82,7 @@ module.exports = {
   // Delete a Album
   delete: function(req, res) {
     if (req.albumData.not_found) {
-      res.status(404).json({
+      return res.status(404).json({
         error: 'QueryError',
         message: 'Album with id ' + req.albumData._id + ' not found'
       });
@@ -104,7 +104,7 @@ module.exports = {
     Album.find(options)
       .then(function(albums) {
         if (albums.length === 0) {
-          res.status(404).json({
+          return res.status(404).json({
             error: 'QueryError',
             message: 'No albums found matching that query'
           });

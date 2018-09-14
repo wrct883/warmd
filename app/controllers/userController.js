@@ -46,7 +46,7 @@ module.exports = {
     }
 
     if (req.userData.not_found) {
-      res.status(404).json({
+      return res.status(404).json({
         QueryError: 'User with username ' +  req.userData.username + ' not found'
       });
     }
@@ -57,14 +57,14 @@ module.exports = {
   // Update a User
   update: function(req, res) {
     if (req.userData.not_found) {
-      res.status(404).json({
+      return res.status(404).json({
         QueryError: 'User with username ' +  req.userData.username + ' not found'
       });
     }
 
     // A User should only be able to change their own password
     if (req.body.password && (req.userData.username !== req.user.username)) {
-      res.status(401).json({
+      return res.status(401).json({
         QueryError: 'Cannot change passwords for other users'
       });
     }
@@ -81,7 +81,7 @@ module.exports = {
   // Delete a User
   delete: function(req, res) {
     if (req.userData.not_found) {
-      res.status(404).json({
+      return res.status(404).json({
         QueryError: 'User with username ' +  req.userData.username + ' not found'
       });
     }
@@ -135,13 +135,14 @@ module.exports = {
     User.find(options)
       .then(function(users) {
         if (users.length === 0) {
-          res.status(404).json({
+          return res.status(404).json({
             QueryError: 'No users found matching that query'
           });
         }
         res.json(users);
       })
       .catch(function(err) {
+        console.log(err);
         res.status(500).json(err);
       });
   }

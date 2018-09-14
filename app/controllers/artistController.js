@@ -38,7 +38,7 @@ module.exports = {
   // Display a Artist that was loaded
   show: function(req, res) {
     if (req.artistData.not_found) {
-      res.status(404).json({
+      return res.status(404).json({
         QueryError: 'Artist with ID ' + req.artistData._id + ' not found'
       });
     }
@@ -49,7 +49,7 @@ module.exports = {
   // Update a Artist
   update: function(req, res) {
     if (req.artistData.not_found) {
-      res.status(404).json({
+      return res.status(404).json({
         QueryError: 'Artist with id ' + req.artistData._id + ' not found'
       });
     }
@@ -66,7 +66,7 @@ module.exports = {
   // Delete a Artist
   delete: function(req, res) {
     if (req.artistData.not_found) {
-      res.status(404).json({
+      return res.status(404).json({
         QueryError: 'Artist with id ' + req.artistData._id + ' not found'
       });
     }
@@ -87,7 +87,7 @@ module.exports = {
     Artist.find(options)
       .then(function(artists) {
         if (artists.length === 0) {
-          res.status(404).json({
+          return res.status(404).json({
             QueryError: 'No artists found matching that query'
           });
         }

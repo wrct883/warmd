@@ -66,7 +66,7 @@ module.exports = {
   // Display a Program that was loaded
   show: function(req, res) {
     if (req.programData.not_found) {
-      res.status(404).json({
+      return res.status(404).json({
         QueryError: 'Program with ID ' + req.programData._id + ' not found'
       });
     }
@@ -77,7 +77,7 @@ module.exports = {
   // Update a Program
   update: function(req, res) {
     if (req.programData.not_found) {
-      res.status(404).json({
+      return res.status(404).json({
         QueryError: 'Program with id ' + req.programData._id + ' not found'
       });
     }
@@ -94,7 +94,7 @@ module.exports = {
   // Delete a Program
   delete: function(req, res) {
     if (req.programData.not_found) {
-      res.status(404).json({
+      return res.status(404).json({
         QueryError: 'Program with id ' + req.programData._id + ' not found'
       });
     }
@@ -120,7 +120,7 @@ module.exports = {
     Program.find(options)
       .then(function(programs) {
         if (programs.length === 0) {
-          res.status(404).json({
+          return res.status(404).json({
             QueryError: 'No programs found matching that query'
           });
         }
