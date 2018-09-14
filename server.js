@@ -10,15 +10,11 @@ var express = require('express'),
     https = require('https'),
     fs = require('fs'),
     app = express(),
-    bookshelf = require('bookshelf'),
-    knex = require('knex'),
     mongoose = require('mongoose');
 
 // Configs
-var env = process.env.NPM_CONFIG_MONGO
-  ? 'mongo'
-  : process.env.NODE_ENV || 'development';
-var config = require('./config/config')[env],
+var env = process.env.NODE_ENV || 'development',
+    config = require('./config/config'),
     wlog = require('./config/logger');
 
 // HTTPS/SSL
@@ -35,43 +31,16 @@ var options = {
 //================================
 // Database ======================
 //================================
+// Register schemas
+require('./app/schema/userModel');
+require('./app/schema/programModel');
+require('./app/schema/artistModel');
+require('./app/schema/albumModel');
+require('./app/schema/reviewModel');
 
-if (!config.is_mongo) {
-  // Get the keys, check to make sure they exist
-  var keys;
-  try {
-    keys = require('./config/keys')[env];
-    if (!keys) {
-      throw new Error('No configuration found for environment ' + env);
-    }
-  } catch (err) {
-    if (err.code === 'MODULE_NOT_FOUND') {
-      console.error('\n\nMake sure you\'ve created config/keys.js\n', err, '\n\n');
-    } else {
-      throw err;
-    }
-  }
+mongoose.Promise = global.Promise;
+mongoose.connect('mongodb://localhost/warmd', {useMongoClient: true});
 
-  var knexConfig = knex({
-    client: 'mysql',
-    connection: keys.mysql,
-    debug: config.debug
-  });
-  var db = bookshelf(knexConfig);                     // Initialize Bookshelf
-  db.plugin('visibility');                            // Use visibility plugin
-  bookshelf.DB = db;                                  // Expose globally
-  app.set('bookshelf', bookshelf);
-} else {
-  // Register schemas
-  require('./app/schema/userModel');
-  require('./app/schema/programModel');
-  require('./app/schema/artistModel');
-  require('./app/schema/albumModel');
-  require('./app/schema/reviewModel');
-
-  mongoose.Promise = global.Promise;
-  mongoose.connect('mongodb://localhost/warmd', {useMongoClient: true});
-}
 require('./config/passport')(passport, config);     // Passport
 require('./config/express')(app, config, passport); // Express config, routes
 //================================
