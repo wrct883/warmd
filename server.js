@@ -50,14 +50,6 @@ require('./config/express')(app, config, passport); // Express config, routes
 // Start app
 var port = process.env.PORT || config.port || 3000;
 https.createServer(options, app).listen(port, function() {
-  wlog.info('__          __     _____  __  __ _____  ');
-  wlog.info('\\ \\        / /\\   |  __ \\|  \\/  |  __ \\ ');
-  wlog.info(' \\ \\  /\\  / /  \\  | |__) | \\  / | |  | |');
-  wlog.info('  \\ \\/  \\/ / /\\ \\ |  _  /| |\\/| | |  | |');
-  wlog.info('   \\  /\\  / ____ \\| | \\ \\| |  | | |__| |');
-  wlog.info('    \\/  \\/_/    \\_\\_|  \\_\\_|  |_|_____/ ');
-  wlog.info('');
-
   wlog.info('WARMD now running on port ' + port + ' in ' + env + ' environment');
   if (config.verbose) {
     console.log('Verbose mode on');
