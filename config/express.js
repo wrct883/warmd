@@ -70,11 +70,8 @@ module.exports = function(app, config, passport) {
   app.use('/resources', express.static(config.root + '/public/resources' /*, {maxAge: 1000 * 60 * 60 * 24}*/));
 
   // Routes
-  if (config.is_mongo) {
-    require(config.routes_dir)(app, config, passport);
-  } else {
-    require('./routes')(app, config, passport);
-  }
+  require('./routes')(app, config, passport);
+
   // Lets handle errors. This should be the last middleware, before the 404 handler.
   app.use(function(err, req, res, next) {
     // treat as 404
