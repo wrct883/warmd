@@ -26,14 +26,6 @@
     "node": "~0.10.22",
     "npm": "^1.4.3"
   },
-  "jshintConfig": {
-    "node": true,
-    "curly": true,
-    "indent": 2,
-    "newcap": true,
-    "strict": true,
-    "trailing": true
-  },
   "dependencies": {
     "acl": "~0.4.0",
     "bcrypt": "^1.0.3",
