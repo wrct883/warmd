@@ -3,13 +3,13 @@ var path = require('path'),
 
 module.exports = {
   'development': {
-    port: 3000,
+    port: 4000,
     root: root,
     debug: true
   },
 
   'test': {
-    port: 3000,
+    port: 4000,
     root: root,
     debug: false
   },

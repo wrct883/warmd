@@ -19,11 +19,11 @@ var env = process.env.NODE_ENV || 'development',
 // Database ======================
 //================================
 // Register schemas
-require('./app/schema/userModel');
-require('./app/schema/programModel');
-require('./app/schema/artistModel');
-require('./app/schema/albumModel');
-require('./app/schema/reviewModel');
+require('./app/models/userModel');
+require('./app/models/programModel');
+require('./app/models/artistModel');
+require('./app/models/albumModel');
+require('./app/models/reviewModel');
 
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/warmd', {useMongoClient: true});
@@ -35,7 +35,7 @@ require('./config/express')(app, config, passport); // Express config, routes
 //================================
 
 // Start app
-var port = process.env.PORT || config.port || 3000;
+var port = process.env.PORT || config.port || 4000;
 app.listen(port, function() {
   wlog.info('WARMD now running on port ' + port + ' in ' + env + ' environment');
   if (config.verbose) {

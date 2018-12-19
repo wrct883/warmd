@@ -3,8 +3,8 @@
 var expect = require('chai').expect,
     request = require('supertest'),
     app = require('../../server'),
-    User = require('../../app/schema/userModel'),
-    Program = require('../../app/schema/programModel');
+    User = require('../../app/models/userModel'),
+    Program = require('../../app/models/programModel');
 
 describe('The Programs controller', function() {
   before(function(done) {
@@ -12,13 +12,6 @@ describe('The Programs controller', function() {
       username: 'admin',
       password: 'adminSecret',
       email: 'admin@example.com',
-      auth_level: 'Admin'
-    });
-
-    var user = new User({
-      username: 'user',
-      password: 'userSecret',
-      email: 'user@example.com',
       auth_level: 'Admin'
     });
 
@@ -63,7 +56,7 @@ describe('The Programs controller', function() {
         })
         .then(function(res) {
           expect(res.body).to.have.property('name', 'Happy Hour');
-          expect(res.body).to.have.property('hosts').that.includes('admin','user');
+          expect(res.body).to.have.property('hosts').that.includes('admin', 'user');
           expect(res.body).to.have.property('type', 'show');
           expect(res.body).to.have.nested.property('start_time.day', 'Mon');
           expect(res.body).to.have.nested.property('end_time.day', 'Mon');

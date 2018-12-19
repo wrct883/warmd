@@ -3,8 +3,8 @@
 var expect = require('chai').expect,
     request = require('supertest'),
     app = require('../../server'),
-    User = require('../../app/schema/userModel'),
-    Artist = require('../../app/schema/artistModel');
+    User = require('../../app/models/userModel'),
+    Artist = require('../../app/models/artistModel');
 
 describe('The Artists controller', function() {
   before(function(done) {

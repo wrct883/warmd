@@ -4,9 +4,9 @@ var chai = require('chai'),
     chaiAsPromised = require('chai-as-promised'),
     request = require('supertest'),
     app = require('../../server'),
-    User = require('../../app/schema/userModel'),
-    Artist = require('../../app/schema/artistModel'),
-    Album = require('../../app/schema/albumModel');
+    User = require('../../app/models/userModel'),
+    Artist = require('../../app/models/artistModel'),
+    Album = require('../../app/models/albumModel');
 
 chai.use(chaiAsPromised);
 var expect = chai.expect;

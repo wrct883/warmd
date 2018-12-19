@@ -3,7 +3,7 @@
 var expect = require('chai').expect,
     request = require('supertest'),
     app = require('../../server'),
-    User = require('../../app/schema/userModel');
+    User = require('../../app/models/userModel');
 
 describe('The Users controller', function() {
   before(function(done) {

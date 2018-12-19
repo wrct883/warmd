@@ -4,10 +4,10 @@ var chai = require('chai'),
     chaiAsPromised = require('chai-as-promised'),
     request = require('supertest'),
     app = require('../../server'),
-    User = require('../../app/schema/userModel'),
-    Artist = require('../../app/schema/artistModel'),
-    Album = require('../../app/schema/albumModel'),
-    Review = require('../../app/schema/reviewModel');
+    User = require('../../app/models/userModel'),
+    Artist = require('../../app/models/artistModel'),
+    Album = require('../../app/models/albumModel'),
+    Review = require('../../app/models/reviewModel');
 
 chai.use(chaiAsPromised);
 var expect = chai.expect;
@@ -46,7 +46,7 @@ describe('The Reviews controller', function() {
         var testReview = new Review({
           username: admin.username,
           album_id: res._id,
-          review: "This album was so good actually amazing and I loved it. Kanye west is a genius and so smart."
+          review: 'This album was so good actually amazing and I loved it. Kanye west is a genius and so smart.'
         });
         testReview.save();
       })
@@ -181,12 +181,11 @@ describe('The Reviews controller', function() {
       return Promise.all([
         expect(result).to.eventually.have.property('username', 'admin'),
         expect(result).to.eventually.have.property('album_id'),
-        expect(result).to.eventually.have.property('review','Kanye West continues to churn out the most impressive music. I cant even keep up.')
+        expect(result).to.eventually.have.property('review', 'Kanye West continues to churn out the most impressive music. I cant even keep up.')
       ]);
     });
 
     it('should update a Review with a PUT request', function() {
-      var kanye = {};
       var admin = request.agent(app);
       var result = admin.post('/auth')
         .send({
@@ -219,16 +218,16 @@ describe('The Reviews controller', function() {
           return admin.get('/reviews')
             .send({
               username: 'admin',
-              album_id: res.body[0]._id,
+              album_id: res.body[0]._id
             })
             .expect(200);
         })
         .then(function(res) {
-          var review_id = res.body[0]._id;
-          return admin.put('/reviews/' + review_id)
+          var reviewId = res.body[0]._id;
+          return admin.put('/reviews/' + reviewId)
             .send({
-                username: 'admin',
-                review: 'I hate this album! >:('
+              username: 'admin',
+              review: 'I hate this album! >:('
             })
             .expect(200);
         })
@@ -267,20 +266,20 @@ describe('The Reviews controller', function() {
                 _id: res.body[0]._id
               }]
             })
-            .expect(200)
+            .expect(200);
         })
         .then(function(res) {
           return admin.get('/reviews')
             .send({
               username: 'admin',
-              album_id: res.body[0]._id,
+              album_id: res.body[0]._id
             })
             .expect(200);
         })
         .then(function(res) {
           var id = res.body[0]._id;
           return admin.delete('/reviews/' + id)
-            // Delete Late Registration review 
+          // Delete Late Registration review
             .expect(200);
         })
         .then(function(res) {
