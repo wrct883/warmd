@@ -82,7 +82,7 @@ module.exports = function(app, config, passport) {
     }
 
     if (err.message && err.message.indexOf('Unexpected') !== -1) {
-      res.json(400, {err: 'Malformed request: ' + err.message});
+      res.json(400, { err: 'Malformed request: ' + err.message });
       return;
     }
 

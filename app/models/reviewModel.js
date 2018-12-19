@@ -34,6 +34,6 @@ var ReviewSchema = new Schema({
 ReviewSchema.index({
   'username': 1,
   'album_id': 1
-}, {unique: true});
+}, { unique: true });
 
 module.exports = mongoose.model('Review', ReviewSchema);

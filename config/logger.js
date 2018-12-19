@@ -25,8 +25,8 @@ var warmdLog = winston.createLogger({
 
   transports: [
     new (winston.transports.Console)(),
-    new (winston.transports.File)( {filename: './logs/error.log', name: 'file.error', level: 'error'}),
-    new (winston.transports.File)( {filename: './logs/info.log', name: 'file.info', level: 'info'})
+    new (winston.transports.File)({ filename: './logs/error.log', name: 'file.error', level: 'error' }),
+    new (winston.transports.File)({ filename: './logs/info.log', name: 'file.info', level: 'info' })
   ]
 });
 winston.addColors(WARMDLogLevels.colors);

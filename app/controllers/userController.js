@@ -18,7 +18,7 @@ module.exports = {
 
   // Load a User from the database
   load: function(req, res, next, username) {
-    User.findOne({username: username})
+    User.findOne({ username: username })
       .then(function(user) {
         if (!user) {
           req.userData = {
@@ -69,7 +69,7 @@ module.exports = {
       });
     }
 
-    User.findOneAndUpdate({username: req.userData.username}, req.body, {new: true})
+    User.findOneAndUpdate({ username: req.userData.username }, req.body, { new: true })
       .then(function(updatedUser) {
         res.json(updatedUser.toJSON());
       })
@@ -86,9 +86,9 @@ module.exports = {
       });
     }
 
-    User.findOneAndRemove({username: req.userData.username})
+    User.findOneAndRemove({ username: req.userData.username })
       .then(function(removedUser) {
-        res.json({removedUser: removedUser.username});
+        res.json({ removedUser: removedUser.username });
       })
       .catch(function(err) {
         res.status(500).json(err);

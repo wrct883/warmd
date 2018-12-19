@@ -43,7 +43,7 @@ describe('The User Model', function() {
 
     newUser.save()
       .then(function(user) {
-        return User.find({username: 'user'});
+        return User.find({ username: 'user' });
       })
       .then(function(found) {
         expect(found.length).to.equal(1);
@@ -65,11 +65,11 @@ describe('The User Model', function() {
       first_name: 'User'
     };
 
-    User.findOne({username: 'user'})
+    User.findOne({ username: 'user' })
       .then(function(user) {
         expect(user).to.have.property('username', 'user');
         expect(user.first_name).to.be.undefined;
-        return User.findOneAndUpdate({username: 'user'}, update, {new: true});
+        return User.findOneAndUpdate({ username: 'user' }, update, { new: true });
       })
       .then(function(updatedUser) {
         expect(updatedUser).to.have.property('first_name', 'User');
@@ -84,7 +84,7 @@ describe('The User Model', function() {
     User.count({})
       .then(function(count) {
         expect(count).to.equal(1);
-        return User.findOneAndRemove({username: 'user'});
+        return User.findOneAndRemove({ username: 'user' });
       })
       .then(function(removedUser) {
         expect(removedUser).to.have.property('username', 'user');

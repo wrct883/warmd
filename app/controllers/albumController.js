@@ -25,7 +25,7 @@ module.exports = {
 
   // Load a Album from the database
   load: function(req, res, next, id) {
-    Album.findOne({_id: id})
+    Album.findOne({ _id: id })
       .then(function(album) {
         if (!album) {
           req.albumData = {
@@ -63,7 +63,7 @@ module.exports = {
       });
     }
 
-    Album.findOneAndUpdate({_id: req.albumData._id}, req.body, {new: true})
+    Album.findOneAndUpdate({ _id: req.albumData._id }, req.body, { new: true })
       .then(function(updatedAlbum) {
         res.json(updatedAlbum);
       })
@@ -88,9 +88,9 @@ module.exports = {
       });
     }
 
-    Album.findOneAndRemove({_id: req.albumData._id})
+    Album.findOneAndRemove({ _id: req.albumData._id })
       .then(function(removedAlbum) {
-        res.json({removedAlbum: removedAlbum._id});
+        res.json({ removedAlbum: removedAlbum._id });
       })
       .catch(function(err) {
         res.status(500).json(err);

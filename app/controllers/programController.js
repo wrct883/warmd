@@ -46,7 +46,7 @@ module.exports = {
 
   // Load a Program from the database
   load: function(req, res, next, id) {
-    Program.findOne({_id: id})
+    Program.findOne({ _id: id })
       .then(function(program) {
         if (!program) {
           req.programData = {
@@ -82,7 +82,7 @@ module.exports = {
       });
     }
 
-    Program.findOneAndUpdate({_id: req.programData._id}, req.body, {new: true})
+    Program.findOneAndUpdate({ _id: req.programData._id }, req.body, { new: true })
       .then(function(updatedProgram) {
         res.json(updatedProgram);
       })
@@ -99,9 +99,9 @@ module.exports = {
       });
     }
 
-    Program.findOneAndRemove({_id: req.programData._id})
+    Program.findOneAndRemove({ _id: req.programData._id })
       .then(function(removedProgram) {
-        res.json({removedProgram: removedProgram._id});
+        res.json({ removedProgram: removedProgram._id });
       })
       .catch(function(err) {
         res.status(500).json(err);

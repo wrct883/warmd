@@ -3,8 +3,13 @@
       "env": {                           // http://eslint.org/docs/user-guide/configuring.html#specifying-environments
         "node": true,                    // Node.js global variables and Node.js-specific rules
         "es6": true,
+        "browser": true,
         "mocha": true
       },
+      "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended"
+      ],
       "parserOptions": {
         "ecmaVersion": 8, // or 2017
         "ecmaFeatures": {
@@ -15,7 +20,7 @@
           "destructuring": true,
           "forOf": true,
           "generators": false,
-          "modules": false,
+          "modules": true,
           "objectLiteralComputedProperties": true,
           "objectLiteralDuplicateProperties": false,
           "objectLiteralShorthandMethods": true,
@@ -23,7 +28,16 @@
           "spread": true,
           "superInFunctions": true,
           "templateStrings": true,
-          "jsx": false
+          "jsx": true
+        },
+        "sourceType": "module",
+      },
+      "settings": {
+        "react": {
+          "createClass": "createReactClass",
+          "pragma": "React",
+          "version": "latest",
+          "flowVersion": "0.53"
         }
       },
       "rules": {
@@ -133,6 +147,7 @@
         "new-cap": [2, {                 // http://eslint.org/docs/rules/new-cap
           "newIsCap": true
         }],
+        "no-console": "off",
         "no-multiple-empty-lines": [2, { // http://eslint.org/docs/rules/no-multiple-empty-lines
           "max": 2
         }],
@@ -142,6 +157,7 @@
         "no-trailing-spaces": 2,         // http://eslint.org/docs/rules/no-trailing-spaces
         "no-extra-parens": [2, "functions"], // http://eslint.org/docs/rules/no-extra-parens
         "no-underscore-dangle": 0,       // http://eslint.org/docs/rules/no-underscore-dangle
+        "object-curly-spacing": [2, "always"],
         "padded-blocks": [2, "never"],   // http://eslint.org/docs/rules/padded-blocks
         "semi": [2, "always"],           // http://eslint.org/docs/rules/semi
         "semi-spacing": [2, {            // http://eslint.org/docs/rules/semi-spacing

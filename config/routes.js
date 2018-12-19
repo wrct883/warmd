@@ -11,7 +11,7 @@ module.exports = function(app, config, passport) {
   // Session init
   app.post('/auth',
     passport.authenticate('local'), function(req, res) {
-      res.json({ok: 1});
+      res.json({ ok: 1 });
     });
 
   // User routes

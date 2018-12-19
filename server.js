@@ -26,7 +26,7 @@ require('./app/models/albumModel');
 require('./app/models/reviewModel');
 
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/warmd', {useMongoClient: true});
+mongoose.connect('mongodb://localhost/warmd', { useMongoClient: true });
 
 require('./config/passport')(passport, config);     // Passport
 require('./config/express')(app, config, passport); // Express config, routes

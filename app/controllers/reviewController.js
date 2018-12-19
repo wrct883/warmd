@@ -25,7 +25,7 @@ module.exports = {
 
   // Load a Review from the database
   load: function(req, res, next, id) {
-    Review.findOne({_id: id})
+    Review.findOne({ _id: id })
       .then(function(review) {
         if (!review) {
           req.reviewData = {
@@ -63,7 +63,7 @@ module.exports = {
       });
     }
 
-    Review.findOneAndUpdate({_id: req.reviewData._id}, req.body, {new: true})
+    Review.findOneAndUpdate({ _id: req.reviewData._id }, req.body, { new: true })
       .then(function(updatedReview) {
         res.json(updatedReview);
       })
@@ -88,9 +88,9 @@ module.exports = {
       });
     }
 
-    Review.findOneAndRemove({_id: req.reviewData._id})
+    Review.findOneAndRemove({ _id: req.reviewData._id })
       .then(function(removedReview) {
-        res.json({removedReview: removedReview._id});
+        res.json({ removedReview: removedReview._id });
       })
       .catch(function(err) {
         res.status(500).json(err);

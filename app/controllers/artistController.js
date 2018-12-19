@@ -18,7 +18,7 @@ module.exports = {
 
   // Load a Artist from the database
   load: function(req, res, next, id) {
-    Artist.findOne({_id: id})
+    Artist.findOne({ _id: id })
       .then(function(artist) {
         if (!artist) {
           req.artistData = {
@@ -54,7 +54,7 @@ module.exports = {
       });
     }
 
-    Artist.findOneAndUpdate({_id: req.artistData._id}, req.body, {new: true})
+    Artist.findOneAndUpdate({ _id: req.artistData._id }, req.body, { new: true })
       .then(function(updatedArtist) {
         res.json(updatedArtist);
       })
@@ -71,9 +71,9 @@ module.exports = {
       });
     }
 
-    Artist.findOneAndRemove({_id: req.artistData._id})
+    Artist.findOneAndRemove({ _id: req.artistData._id })
       .then(function(removedArtist) {
-        res.json({removedArtist: removedArtist._id});
+        res.json({ removedArtist: removedArtist._id });
       })
       .catch(function(err) {
         res.status(500).json(err);
