@@ -1,7 +1,6 @@
 'use strict';
 
-var express = require('express'),
-    bodyParser = require('body-parser'),
+var bodyParser = require('body-parser'),
     session = require('express-session'),
     cookieParser = require('cookie-parser'),
     morgan = require('morgan'),
@@ -51,11 +50,6 @@ module.exports = function(app, config, passport) {
     }
   });
 
-  // Serve static content. Must be after static security middleware
-  app.use('/app', express.static(config.root + '/public/app'));
-  // TODO: Have cache conditional on development/production variable
-  app.use('/resources', express.static(config.root + '/public/resources' /*, {maxAge: 1000 * 60 * 60 * 24}*/));
-
   // Routes
   require('./routes')(app, config, passport);
 
@@ -74,7 +68,6 @@ module.exports = function(app, config, passport) {
     }
 
     // log it
-    // TODO: send emails
     console.error(err.stack);
 
     // error page
