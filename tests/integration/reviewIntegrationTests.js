@@ -4,10 +4,10 @@ var chai = require('chai'),
     chaiAsPromised = require('chai-as-promised'),
     request = require('supertest'),
     app = require('../../server'),
-    User = require('../../app/models/userModel'),
-    Artist = require('../../app/models/artistModel'),
-    Album = require('../../app/models/albumModel'),
-    Review = require('../../app/models/reviewModel');
+    User = require('../../app/v1/models/userModel'),
+    Artist = require('../../app/v1/models/artistModel'),
+    Album = require('../../app/v1/models/albumModel'),
+    Review = require('../../app/v1/models/reviewModel');
 
 chai.use(chaiAsPromised);
 var expect = chai.expect;
@@ -58,10 +58,10 @@ describe('The Reviews controller', function() {
       });
   });
 
-  describe('/reviews', function() {
+  describe('/v1/reviews', function() {
     it('should create a new Review with a POST request', function() {
       var admin = request.agent(app);
-      var result = admin.post('/auth')
+      var result = admin.post('/v1/auth')
         .send({
           username: 'admin',
           password: 'adminSecret'
@@ -69,14 +69,14 @@ describe('The Reviews controller', function() {
         .expect(200)
         .then(function(res) {
           // Get Kanye from the db
-          return admin.get('/artists')
+          return admin.get('/v1/artists')
             .send({
               name: 'Kanye West'
             })
             .expect(200);
         })
         .then(function(res) {
-          return admin.post('/albums')
+          return admin.post('/v1/albums')
             .send({
               name: 'College Dropout',
               artists: [
@@ -89,7 +89,7 @@ describe('The Reviews controller', function() {
             .expect(201);
         })
         .then(function(res) {
-          return admin.post('/reviews')
+          return admin.post('/v1/reviews')
             .send({
               username: 'admin',
               album_id: res.body._id,
@@ -110,14 +110,14 @@ describe('The Reviews controller', function() {
 
     it('should retrieve all Reviews with a GET request', function() {
       var admin = request.agent(app);
-      var result = admin.post('/auth')
+      var result = admin.post('/v1/auth')
         .send({
           username: 'admin',
           password: 'adminSecret'
         })
         .expect(200)
         .then(function(res) {
-          return admin.get('/reviews')
+          return admin.get('/v1/reviews')
             .expect(200);
         })
         .then(function(res) {
@@ -130,10 +130,10 @@ describe('The Reviews controller', function() {
     });
   });
 
-  describe('/reviews/:review', function() {
+  describe('/v1/reviews/:review', function() {
     it('should retrieve a Review with a GET request', function() {
       var admin = request.agent(app);
-      var result = admin.post('/auth')
+      var result = admin.post('/v1/auth')
         .send({
           username: 'admin',
           password: 'adminSecret'
@@ -141,14 +141,14 @@ describe('The Reviews controller', function() {
         .expect(200)
         .then(function(res) {
           // Get Kanye from the db
-          return admin.get('/artists')
+          return admin.get('/v1/artists')
             .send({
               name: 'Kanye West'
             })
             .expect(200);
         })
         .then(function(res) {
-          return admin.post('/albums')
+          return admin.post('/v1/albums')
             .send({
               name: 'Late Registration',
               artists: [
@@ -161,7 +161,7 @@ describe('The Reviews controller', function() {
             .expect(201);
         })
         .then(function(res) {
-          return admin.post('/reviews')
+          return admin.post('/v1/reviews')
             .send({
               username: 'admin',
               album_id: res.body._id,
@@ -171,7 +171,7 @@ describe('The Reviews controller', function() {
         })
         .then(function(res) {
           var id = res.body._id;
-          return admin.get('/reviews/' + id)
+          return admin.get('/v1/reviews/' + id)
             .expect(200);
         })
         .then(function(res) {
@@ -187,7 +187,7 @@ describe('The Reviews controller', function() {
 
     it('should update a Review with a PUT request', function() {
       var admin = request.agent(app);
-      var result = admin.post('/auth')
+      var result = admin.post('/v1/auth')
         .send({
           username: 'admin',
           password: 'adminSecret'
@@ -195,14 +195,14 @@ describe('The Reviews controller', function() {
         .expect(200)
         .then(function(res) {
           // Get Kanye from the db
-          return admin.get('/artists')
+          return admin.get('/v1/artists')
             .send({
               name: 'Kanye West'
             })
             .expect(200);
         })
         .then(function(res) {
-          return admin.get('/albums')
+          return admin.get('/v1/albums')
             .send({
               name: 'Late Registration',
               artists: [
@@ -215,7 +215,7 @@ describe('The Reviews controller', function() {
             .expect(200);
         })
         .then(function(res) {
-          return admin.get('/reviews')
+          return admin.get('/v1/reviews')
             .send({
               username: 'admin',
               album_id: res.body[0]._id
@@ -224,7 +224,7 @@ describe('The Reviews controller', function() {
         })
         .then(function(res) {
           var reviewId = res.body[0]._id;
-          return admin.put('/reviews/' + reviewId)
+          return admin.put('/v1/reviews/' + reviewId)
             .send({
               username: 'admin',
               review: 'I hate this album! >:('
@@ -243,7 +243,7 @@ describe('The Reviews controller', function() {
 
     it('should delete a Review with a DELETE request', function() {
       var admin = request.agent(app);
-      var result = admin.post('/auth')
+      var result = admin.post('/v1/auth')
         .send({
           username: 'admin',
           password: 'adminSecret'
@@ -251,14 +251,14 @@ describe('The Reviews controller', function() {
         .expect(200)
         .then(function(res) {
           // Find Kanye
-          return admin.get('/artists')
+          return admin.get('/v1/artists')
             .send({
               name: 'Kanye West'
             })
             .expect(200);
         })
         .then(function(res) {
-          return admin.get('/albums')
+          return admin.get('/v1/albums')
             .send({
               name: 'Late Registration',
               artists: [{
@@ -269,7 +269,7 @@ describe('The Reviews controller', function() {
             .expect(200);
         })
         .then(function(res) {
-          return admin.get('/reviews')
+          return admin.get('/v1/reviews')
             .send({
               username: 'admin',
               album_id: res.body[0]._id
@@ -278,7 +278,7 @@ describe('The Reviews controller', function() {
         })
         .then(function(res) {
           var id = res.body[0]._id;
-          return admin.delete('/reviews/' + id)
+          return admin.delete('/v1/reviews/' + id)
           // Delete Late Registration review
             .expect(200);
         })

@@ -19,7 +19,6 @@
     "test": "NPM_CONFIG_MONGO=true NODE_ENV=test ./node_modules/.bin/mocha --reporter spec --timeout 10000 tests/integration/ tests/unit/ --exit",
     "deploy": "sudo NODE_ENV=production ./node_modules/forever/bin/forever start -a -l forever.log -o output.log -e errors.log server.js",
     "halt": "NODE_ENV=production ./node_modules/forever/bin/forever stop server.js",
-    "postinstall": "./scripts/postinstall.sh",
     "lint": "eslint ."
   },
   "engines": {
@@ -28,7 +27,7 @@
   },
   "dependencies": {
     "acl": "~0.4.0",
-    "bcrypt": "^1.0.3",
+    "bcrypt": ">=2.0.0",
     "body-parser": "~1.6.0",
     "bookshelf": "^0.13.3",
     "checkit": "^0.2.0-pre",
@@ -42,17 +41,15 @@
     "method-override": "^3.0.0",
     "mongoose": "^4.13.6",
     "mongoose-hidden": "^1.5.1",
-    "morgan": "~1.1.1",
+    "morgan": "^1.9.1",
     "mysql": "^2.16.0",
-    "nodemailer": "~1.1.0",
     "number-to-words": "^1.2.3",
     "passport": "~0.2.0",
     "passport-local": "~1.0.0",
     "request": "^2.88.0",
     "request-json": "^0.6.3",
     "shortid": "^2.2.8",
-    "winston": "^3.1.0",
-    "winston-mail": "^1.5.1"
+    "winston": "^3.1.0"
   },
   "devDependencies": {
     "chai": "^4.1.2",

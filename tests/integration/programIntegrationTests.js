@@ -3,8 +3,8 @@
 var expect = require('chai').expect,
     request = require('supertest'),
     app = require('../../server'),
-    User = require('../../app/models/userModel'),
-    Program = require('../../app/models/programModel');
+    User = require('../../app/v1/models/userModel'),
+    Program = require('../../app/v1/models/programModel');
 
 describe('The Programs controller', function() {
   before(function(done) {
@@ -25,17 +25,17 @@ describe('The Programs controller', function() {
       });
   });
 
-  describe('/programs', function() {
+  describe('/v1/programs', function() {
     it('should create a new Program with a POST request', function(done) {
       var admin = request.agent(app);
-      admin.post('/auth')
+      admin.post('/v1/auth')
         .send({
           username: 'admin',
           password: 'adminSecret'
         })
         .expect(200)
         .then(function(res) {
-          return admin.post('/programs')
+          return admin.post('/v1/programs')
             .send({
               name: 'Happy Hour',
               hosts: ['admin', 'user'],
@@ -73,14 +73,14 @@ describe('The Programs controller', function() {
 
     it('should generate promo codes properly', function(done) {
       var admin = request.agent(app);
-      admin.post('/auth')
+      admin.post('/v1/auth')
         .send({
           username: 'admin',
           password: 'adminSecret'
         })
         .expect(200)
         .then(function(res) {
-          return admin.post('/programs')
+          return admin.post('/v1/programs')
             .send({
               name: 'Happier Hour 2016',
               hosts: ['admin'],
@@ -99,7 +99,7 @@ describe('The Programs controller', function() {
         })
         .then(function(res) {
           expect(res.body.promo_code).to.equal('PROSUM16-00');
-          return admin.post('/programs')
+          return admin.post('/v1/programs')
             .send({
               name: 'Nappiest Hour 2016',
               hosts: ['admin'],
@@ -128,14 +128,14 @@ describe('The Programs controller', function() {
 
     it('should retrieve all Programs with a GET request', function(done) {
       var admin = request.agent(app);
-      admin.post('/auth')
+      admin.post('/v1/auth')
         .send({
           username: 'admin',
           password: 'adminSecret'
         })
         .expect(200)
         .then(function(res) {
-          return admin.get('/programs')
+          return admin.get('/v1/programs')
             .expect(200);
         })
         .then(function(res) {
@@ -149,7 +149,7 @@ describe('The Programs controller', function() {
 
     it('should retrieve all active programs', function(done) {
       var admin = request.agent(app);
-      admin.post('/auth')
+      admin.post('/v1/auth')
         .send({
           username: 'admin',
           password: 'adminSecret'
@@ -157,7 +157,7 @@ describe('The Programs controller', function() {
         .expect(200)
         .then(function(res) {
           // Add a new inactive program that shouldn't get retrieved later
-          return admin.post('/programs')
+          return admin.post('/v1/programs')
             .send({
               name: 'Inactivity',
               hosts: ['admin'],
@@ -175,7 +175,7 @@ describe('The Programs controller', function() {
             .expect(201);
         })
         .then(function(res) {
-          return admin.get('/programs?active=true')
+          return admin.get('/v1/programs?active=true')
             .expect(200);
         })
         .then(function(res) {
@@ -191,17 +191,17 @@ describe('The Programs controller', function() {
     });
   });
 
-  describe('/programs/:program', function() {
+  describe('/v1/programs/:program', function() {
     it('should retrieve a Program with a GET request', function(done) {
       var admin = request.agent(app);
-      admin.post('/auth')
+      admin.post('/v1/auth')
         .send({
           username: 'admin',
           password: 'adminSecret'
         })
         .expect(200)
         .then(function(res) {
-          return admin.post('/programs')
+          return admin.post('/v1/programs')
             .send({
               name: 'ebony spectrum',
               hosts: ['admin'],
@@ -219,7 +219,7 @@ describe('The Programs controller', function() {
         })
         .then(function(res) {
           var id = res.body._id;
-          return admin.get('/programs/' + id)
+          return admin.get('/v1/programs/' + id)
             .expect(200);
         })
         .then(function(res) {
@@ -233,14 +233,14 @@ describe('The Programs controller', function() {
 
     it('should update a Program with a PUT request', function(done) {
       var admin = request.agent(app);
-      admin.post('/auth')
+      admin.post('/v1/auth')
         .send({
           username: 'admin',
           password: 'adminSecret'
         })
         .expect(200)
         .then(function(res) {
-          return admin.post('/programs')
+          return admin.post('/v1/programs')
             .send({
               name: 'Update Show',
               hosts: ['admin'],
@@ -258,7 +258,7 @@ describe('The Programs controller', function() {
         })
         .then(function(res) {
           var id = res.body._id;
-          return admin.put('/programs/' + id)
+          return admin.put('/v1/programs/' + id)
             // Change the show's name
             .send({
               name: 'New Update Show'
@@ -276,14 +276,14 @@ describe('The Programs controller', function() {
 
     it('should delete a Program with a DELETE request', function(done) {
       var admin = request.agent(app);
-      admin.post('/auth')
+      admin.post('/v1/auth')
         .send({
           username: 'admin',
           password: 'adminSecret'
         })
         .expect(200)
         .then(function(res) {
-          return admin.post('/programs')
+          return admin.post('/v1/programs')
             .send({
               name: 'Chopping Block',
               hosts: ['admin'],
@@ -301,7 +301,7 @@ describe('The Programs controller', function() {
         })
         .then(function(res) {
           var id = res.body._id;
-          return admin.delete('/programs/' + id)
+          return admin.delete('/v1/programs/' + id)
             // Delete the Chopping Block
             .expect(200);
         })

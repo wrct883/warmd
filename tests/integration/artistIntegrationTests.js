@@ -3,8 +3,8 @@
 var expect = require('chai').expect,
     request = require('supertest'),
     app = require('../../server'),
-    User = require('../../app/models/userModel'),
-    Artist = require('../../app/models/artistModel');
+    User = require('../../app/v1/models/userModel'),
+    Artist = require('../../app/v1/models/artistModel');
 
 describe('The Artists controller', function() {
   before(function(done) {
@@ -32,17 +32,17 @@ describe('The Artists controller', function() {
       });
   });
 
-  describe('/artists', function() {
+  describe('/v1/artists', function() {
     it('should create a new Artist with a POST request', function(done) {
       var admin = request.agent(app);
-      admin.post('/auth')
+      admin.post('/v1/auth')
         .send({
           username: 'admin',
           password: 'adminSecret'
         })
         .expect(200)
         .then(function(res) {
-          return admin.post('/artists')
+          return admin.post('/v1/artists')
             .send({
               name: 'Kanye West',
               alpha_name: 'kanyewest'
@@ -62,14 +62,14 @@ describe('The Artists controller', function() {
 
     it('should retrieve all Artists with a GET request', function(done) {
       var admin = request.agent(app);
-      admin.post('/auth')
+      admin.post('/v1/auth')
         .send({
           username: 'admin',
           password: 'adminSecret'
         })
         .expect(200)
         .then(function(res) {
-          return admin.get('/artists')
+          return admin.get('/v1/artists')
             .expect(200);
         })
         .then(function(res) {
@@ -82,17 +82,17 @@ describe('The Artists controller', function() {
     });
   });
 
-  describe('/artists/:artist', function() {
+  describe('/v1/artists/:artist', function() {
     it('should retrieve an Artist with a GET request', function(done) {
       var admin = request.agent(app);
-      admin.post('/auth')
+      admin.post('/v1/auth')
         .send({
           username: 'admin',
           password: 'adminSecret'
         })
         .expect(200)
         .then(function(res) {
-          return admin.post('/artists')
+          return admin.post('/v1/artists')
             .send({
               name: 'The Rolling Stones',
               alpha_name: 'rollingstones'
@@ -101,7 +101,7 @@ describe('The Artists controller', function() {
         })
         .then(function(res) {
           var id = res.body._id;
-          return admin.get('/artists/' + id)
+          return admin.get('/v1/artists/' + id)
             .expect(200);
         })
         .then(function(res) {
@@ -115,14 +115,14 @@ describe('The Artists controller', function() {
 
     it('should update an Artist with a PUT request', function(done) {
       var admin = request.agent(app);
-      admin.post('/auth')
+      admin.post('/v1/auth')
         .send({
           username: 'admin',
           password: 'adminSecret'
         })
         .expect(200)
         .then(function(res) {
-          return admin.post('/artists')
+          return admin.post('/v1/artists')
             .send({
               name: 'Jay Z',
               alpha_name: 'jayz'
@@ -131,7 +131,7 @@ describe('The Artists controller', function() {
         })
         .then(function(res) {
           var id = res.body._id;
-          return admin.put('/artists/' + id)
+          return admin.put('/v1/artists/' + id)
             // Jay brought back the hyphen in June 2017
             .send({
               name: 'JAY-Z'
@@ -149,14 +149,14 @@ describe('The Artists controller', function() {
 
     it('should delete an Artist with a DELETE request', function(done) {
       var admin = request.agent(app);
-      admin.post('/auth')
+      admin.post('/v1/auth')
         .send({
           username: 'admin',
           password: 'adminSecret'
         })
         .expect(200)
         .then(function(res) {
-          return admin.post('/artists')
+          return admin.post('/v1/artists')
             .send({
               name: 'Iggy Azalea',
               alpha_name: 'iggyazalea'
@@ -165,7 +165,7 @@ describe('The Artists controller', function() {
         })
         .then(function(res) {
           var id = res.body._id;
-          return admin.delete('/artists/' + id)
+          return admin.delete('/v1/artists/' + id)
             // No I-G-G-Y in the station, please
             .expect(200);
         })

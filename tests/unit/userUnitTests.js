@@ -1,7 +1,7 @@
 'use strict';
 
 var expect = require('chai').expect,
-    User = require('../../app/models/userModel');
+    User = require('../../app/v1/models/userModel');
 
 describe('The User Model', function() {
   before(function(done) {

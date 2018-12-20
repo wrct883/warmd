@@ -1,7 +1,6 @@
 'use strict';
 
 var express = require('express'),
-    hbs = require('express-hbs'),
     bodyParser = require('body-parser'),
     session = require('express-session'),
     cookieParser = require('cookie-parser'),
@@ -24,19 +23,7 @@ module.exports = function(app, config, passport) {
     app.use(morgan());
   }
 
-
-  // Set rendering engines
-  app.engine('hbs', hbs.express3({
-    partialsDir: config.root + '/app/views/partials',
-    contentHelperName: 'content'
-  }));
-
-  app.set('view engine', 'hbs');
-  app.set('views', config.root + '/app/views');
-
-
   // Config for all environments
-
   app.use(cookieParser());              // Cookies
   app.use(bodyParser.json());           // Request bodies (query params, payloads)
   app.use(bodyParser.urlencoded({       // Request bodies (query params, payloads)

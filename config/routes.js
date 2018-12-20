@@ -1,15 +1,15 @@
 'use strict';
 
-var userController = require('../app/controllers/userController'),
-    programController = require('../app/controllers/programController'),
-    artistController = require('../app/controllers/artistController'),
-    albumController = require('../app/controllers/albumController'),
-    reviewController = require('../app/controllers/reviewController'),
+var userController = require('../app/v1/controllers/userController'),
+    programController = require('../app/v1/controllers/programController'),
+    artistController = require('../app/v1/controllers/artistController'),
+    albumController = require('../app/v1/controllers/albumController'),
+    reviewController = require('../app/v1/controllers/reviewController'),
     express = require('express');
 
 module.exports = function(app, config, passport) {
   // Session init
-  app.post('/auth',
+  app.post('/v1/auth',
     passport.authenticate('local'), function(req, res) {
       res.json({ ok: 1 });
     });
@@ -33,7 +33,7 @@ module.exports = function(app, config, passport) {
     .delete('/:user',
       userController.isAuthed,
       userController.delete);
-  app.use('/users', userRouter);
+  app.use('/v1/users', userRouter);
 
   // Program routes
   var programRouter = new express.Router()
@@ -53,7 +53,7 @@ module.exports = function(app, config, passport) {
     .delete('/:program',
       userController.isAuthed,
       programController.delete);
-  app.use('/programs', programRouter);
+  app.use('/v1/programs', programRouter);
 
   // Artist routes
   var artistRouter = new express.Router()
@@ -73,7 +73,7 @@ module.exports = function(app, config, passport) {
     .delete('/:artist',
       userController.isAuthed,
       artistController.delete);
-  app.use('/artists', artistRouter);
+  app.use('/v1/artists', artistRouter);
 
   // Album routes
   var albumRouter = new express.Router()
@@ -93,7 +93,7 @@ module.exports = function(app, config, passport) {
     .delete('/:album',
       userController.isAuthed,
       albumController.delete);
-  app.use('/albums', albumRouter);
+  app.use('/v1/albums', albumRouter);
 
   // Review routes
   var reviewRouter = new express.Router()
@@ -113,5 +113,5 @@ module.exports = function(app, config, passport) {
     .delete('/:review',
       userController.isAuthed,
       reviewController.delete);
-  app.use('/reviews', reviewRouter);
+  app.use('/v1/reviews', reviewRouter);
 };

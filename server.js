@@ -19,11 +19,11 @@ var env = process.env.NODE_ENV || 'development',
 // Database ======================
 //================================
 // Register schemas
-require('./app/models/userModel');
-require('./app/models/programModel');
-require('./app/models/artistModel');
-require('./app/models/albumModel');
-require('./app/models/reviewModel');
+require('./app/v1/models/userModel');
+require('./app/v1/models/programModel');
+require('./app/v1/models/artistModel');
+require('./app/v1/models/albumModel');
+require('./app/v1/models/reviewModel');
 
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/warmd', { useMongoClient: true });
