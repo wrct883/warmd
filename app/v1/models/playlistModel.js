@@ -37,6 +37,6 @@ PlaylistSchema.index({
   'program': 1,
   'start_time': 1,
   'end_time': 1
-}, {unique: true});
+}, { unique: true });
 
 module.exports = mongoose.model('Playlist', PlaylistSchema);

@@ -24,6 +24,7 @@ require('./app/v1/models/programModel');
 require('./app/v1/models/artistModel');
 require('./app/v1/models/albumModel');
 require('./app/v1/models/reviewModel');
+require('./app/v1/models/playlistModel');
 
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/warmd', { useMongoClient: true });

@@ -14,7 +14,7 @@ module.exports = {
       .catch(function(err) {
         // Duplicate Key Error
         if (err.code && err.code === 11000) {
-          res.status(400).json({
+          return res.status(400).json({
             error: 'InsertionError',
             message: 'Duplicate Key Error'
           });
@@ -25,7 +25,7 @@ module.exports = {
 
   // Load a Play from the database
   load: function(req, res, next, id) {
-    Play.findOne({_id: id})
+    Play.findOne({ _id: id })
       .then(function(play) {
         if (!play) {
           req.playData = {
@@ -45,7 +45,7 @@ module.exports = {
   // Display a Play that was loaded
   show: function(req, res) {
     if (req.playData.not_found) {
-      res.status(404).json({
+      return res.status(404).json({
         error: 'QueryError',
         message: 'Play with id ' + req.playData._id + ' not found'
       });
@@ -57,20 +57,20 @@ module.exports = {
   // Update a Play
   update: function(req, res) {
     if (req.playData.not_found) {
-      res.status(404).json({
+      return res.status(404).json({
         error: 'QueryError',
         message: 'Play with id ' + req.playData._id + ' not found'
       });
     }
 
-    Play.findOneAndUpdate({_id: req.playData._id}, req.body, {new: true})
+    Play.findOneAndUpdate({ _id: req.playData._id }, req.body, { new: true })
       .then(function(updatedPlay) {
         res.json(updatedPlay);
       })
       .catch(function(err) {
         // Duplicate Key Error
         if (err.code && err.code === 11000) {
-          res.status(400).json({
+          return res.status(400).json({
             error: 'UpdateError',
             message: 'Duplicate Key Error'
           });
@@ -82,15 +82,15 @@ module.exports = {
   // Delete a Play
   delete: function(req, res) {
     if (req.playData.not_found) {
-      res.status(404).json({
+      return res.status(404).json({
         error: 'QueryError',
         message: 'Play with id ' + req.playData._id + ' not found'
       });
     }
 
-    Play.findOneAndRemove({_id: req.playData._id})
+    Play.findOneAndRemove({ _id: req.playData._id })
       .then(function(removedPlay) {
-        res.json({removedPlay: removedPlay._id});
+        res.json({ removedPlay: removedPlay._id });
       })
       .catch(function(err) {
         res.status(500).json(err);
@@ -104,7 +104,7 @@ module.exports = {
     Play.find(options)
       .then(function(plays) {
         if (plays.length === 0) {
-          res.status(404).json({
+          return res.status(404).json({
             error: 'QueryError',
             message: 'No plays found matching that query'
           });

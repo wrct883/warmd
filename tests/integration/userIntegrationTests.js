@@ -357,7 +357,7 @@ describe('The Users controller', function() {
         });
     });
 
-    it('should prevent Users from modifying other User\'s passwords', function(done) {
+    it("should prevent Users from modifying other User's passwords", function(done) {
       var user = request.agent(app);
       user.post('/v1/auth')
         .send({

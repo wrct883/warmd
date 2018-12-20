@@ -14,7 +14,7 @@ module.exports = {
       .catch(function(err) {
         // Duplicate Key Error
         if (err.code && err.code === 11000) {
-          res.status(400).json({
+          return res.status(400).json({
             error: 'InsertionError',
             message: 'Duplicate Key Error'
           });
@@ -25,7 +25,7 @@ module.exports = {
 
   // Load a Playlist from the database
   load: function(req, res, next, id) {
-    Playlist.findOne({_id: id})
+    Playlist.findOne({ _id: id })
       .then(function(playlist) {
         if (!playlist) {
           req.playlistData = {
@@ -45,7 +45,7 @@ module.exports = {
   // Display a Playlist that was loaded
   show: function(req, res) {
     if (req.playlistData.not_found) {
-      res.status(404).json({
+      return res.status(404).json({
         error: 'QueryError',
         message: 'Playlist with id ' + req.playlistData._id + ' not found'
       });
@@ -57,20 +57,20 @@ module.exports = {
   // Update a Playlist
   update: function(req, res) {
     if (req.playlistData.not_found) {
-      res.status(404).json({
+      return res.status(404).json({
         error: 'QueryError',
         message: 'Playlist with id ' + req.playlistData._id + ' not found'
       });
     }
 
-    Playlist.findOneAndUpdate({_id: req.playlistData._id}, req.body, {new: true})
+    Playlist.findOneAndUpdate({ _id: req.playlistData._id }, req.body, { new: true })
       .then(function(updatedPlaylist) {
         res.json(updatedPlaylist);
       })
       .catch(function(err) {
         // Duplicate Key Error
         if (err.code && err.code === 11000) {
-          res.status(400).json({
+          return res.status(400).json({
             error: 'UpdateError',
             message: 'Duplicate Key Error'
           });
@@ -82,15 +82,15 @@ module.exports = {
   // Delete a Playlist
   delete: function(req, res) {
     if (req.playlistData.not_found) {
-      res.status(404).json({
+      return res.status(404).json({
         error: 'QueryError',
         message: 'Playlist with id ' + req.playlistData._id + ' not found'
       });
     }
 
-    Playlist.findOneAndRemove({_id: req.playlistData._id})
+    Playlist.findOneAndRemove({ _id: req.playlistData._id })
       .then(function(removedPlaylist) {
-        res.json({removedPlaylist: removedPlaylist._id});
+        res.json({ removedPlaylist: removedPlaylist._id });
       })
       .catch(function(err) {
         res.status(500).json(err);
@@ -104,7 +104,7 @@ module.exports = {
     Playlist.find(options)
       .then(function(playlists) {
         if (playlists.length === 0) {
-          res.status(404).json({
+          return res.status(404).json({
             error: 'QueryError',
             message: 'No playlists found matching that query'
           });

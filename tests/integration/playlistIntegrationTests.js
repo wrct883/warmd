@@ -4,9 +4,9 @@ var chai = require('chai'),
     chaiAsPromised = require('chai-as-promised'),
     request = require('supertest'),
     app = require('../../server'),
-    User = require('../../app/schema/userModel'),
-    Playlist = require('../../app/schema/playlistModel'),
-    Play = require('../../app/schema/playModel');
+    User = require('../../app/v1/models/userModel'),
+    Playlist = require('../../app/v1/models/playlistModel'),
+    Play = require('../../app/v1/models/playModel');
 
 chai.use(chaiAsPromised);
 var expect = chai.expect;
@@ -26,17 +26,17 @@ describe('The Playlsit controller', function() {
       });
   });
 
-  describe('/playlists', function() {
+  describe('/v1/playlists', function() {
     it('should create a new Playlist with a POST request', function() {
       var admin = request.agent(app);
-      var result = admin.post('/auth')
+      var result = admin.post('/v1/auth')
         .send({
           username: 'admin',
           password: 'adminSecret'
         })
         .expect(200)
         .then(function(res) {
-          return admin.post('/playlists')
+          return admin.post('/v1/playlists')
             .send({
               _id: 'playlist1',
               user: 'admin',
@@ -59,7 +59,7 @@ describe('The Playlsit controller', function() {
 
     it('should disallow Playlists with the same user, program, and times', function() {
       var admin = request.agent(app);
-      var result = admin.post('/auth')
+      var result = admin.post('/v1/auth')
         .send({
           username: 'admin',
           password: 'adminSecret'
@@ -67,7 +67,7 @@ describe('The Playlsit controller', function() {
         .expect(200)
         .then(function(res) {
           // Try to create a Playlist with the same name, program, and times
-          return admin.post('/playlists')
+          return admin.post('/v1/playlists')
             .send({
               _id: 'playlistDupe',
               user: 'admin',
@@ -89,14 +89,14 @@ describe('The Playlsit controller', function() {
 
     it('should retrieve all Playlists with a GET request', function() {
       var admin = request.agent(app);
-      var result = admin.post('/auth')
+      var result = admin.post('/v1/auth')
         .send({
           username: 'admin',
           password: 'adminSecret'
         })
         .expect(200)
         .then(function(res) {
-          return admin.get('/playlists')
+          return admin.get('/v1/playlists')
             .expect(200);
         })
         .then(function(res) {
