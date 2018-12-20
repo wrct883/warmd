@@ -3,7 +3,7 @@
 var expect = require('chai').expect,
     request = require('supertest'),
     app = require('../../server'),
-    User = require('../../app/schema/userModel');
+    User = require('../../app/v1/models/userModel');
 
 describe('The Users controller', function() {
   before(function(done) {
@@ -54,10 +54,10 @@ describe('The Users controller', function() {
       });
   });
 
-  describe('/auth', function() {
+  describe('/v1/auth', function() {
     it('should authenticate a username/password combo', function(done) {
       request.agent(app)
-        .post('/auth')
+        .post('/v1/auth')
         .send({
           username: 'admin',
           password: 'adminSecret'
@@ -73,17 +73,17 @@ describe('The Users controller', function() {
     });
   });
 
-  describe('/users', function() {
+  describe('/v1/users', function() {
     it('should create a new User', function(done) {
       var admin = request.agent(app);
-      admin.post('/auth')
+      admin.post('/v1/auth')
         .send({
           username: 'admin',
           password: 'adminSecret'
         })
         .expect(200)
         .then(function(res) {
-          return admin.post('/users')
+          return admin.post('/v1/users')
             .send({
               username: 'test4',
               password: 'secret4',
@@ -103,14 +103,14 @@ describe('The Users controller', function() {
 
     it('should retrieve all users with a GET request', function(done) {
       var admin = request.agent(app);
-      admin.post('/auth')
+      admin.post('/v1/auth')
         .send({
           username: 'admin',
           password: 'adminSecret'
         })
         .expect(200)
         .then(function(res) {
-          return admin.get('/users')
+          return admin.get('/v1/users')
             .expect(200);
         })
         .then(function(res) {
@@ -124,14 +124,14 @@ describe('The Users controller', function() {
 
     it('should fail to create a User with insufficient information', function(done) {
       var admin = request.agent(app);
-      admin.post('/auth')
+      admin.post('/v1/auth')
         .send({
           username: 'admin',
           password: 'adminSecret'
         })
         .expect(200)
         .then(function(res) {
-          return admin.post('/users')
+          return admin.post('/v1/users')
             .send({
               username: 'testBad'
             })
@@ -147,14 +147,14 @@ describe('The Users controller', function() {
 
     it('should not allow non-admins to create Users', function(done) {
       var nonAdmin = request.agent(app);
-      nonAdmin.post('/auth')
+      nonAdmin.post('/v1/auth')
         .send({
           username: 'test1',
           password: 'secret1'
         })
         .expect(200)
         .then(function(res) {
-          return nonAdmin.post('/users')
+          return nonAdmin.post('/v1/users')
             .send({
               username: 'test5',
               password: 'hubris'
@@ -172,7 +172,7 @@ describe('The Users controller', function() {
 
     it('should require auth', function(done) {
       request.agent(app)
-        .post('/users')
+        .post('/v1/users')
         .send({
           username: 'notAuthed',
           password: 'secrets',
@@ -190,14 +190,14 @@ describe('The Users controller', function() {
 
     it('should get all pending users', function(done) {
       var admin = request.agent(app);
-      admin.post('/auth')
+      admin.post('/v1/auth')
         .send({
           username: 'admin',
           password: 'adminSecret'
         })
         .expect(200)
         .then(function(res) {
-          return admin.get('/users?pending=true')
+          return admin.get('/v1/users?pending=true')
             .expect(200);
         })
         .then(function(res) {
@@ -214,7 +214,7 @@ describe('The Users controller', function() {
 
     it('should find users based on some query', function(done) {
       var admin = request.agent(app);
-      admin.post('/auth')
+      admin.post('/v1/auth')
         .send({
           username: 'admin',
           password: 'adminSecret'
@@ -222,7 +222,7 @@ describe('The Users controller', function() {
         .expect(200)
         .then(function(res) {
           // Find all users that are air cleared
-          return admin.get('/users')
+          return admin.get('/v1/users')
             .send({
               'training_status.is_air_trained': true
             })
@@ -233,7 +233,7 @@ describe('The Users controller', function() {
           expect(res.body[0]).to.have.nested.property('training_status.is_air_trained', true);
 
           // Find all users that have auth levels of 'Exec' or 'Admin'
-          return admin.get('/users')
+          return admin.get('/v1/users')
             .send({
               'auth_level': {
                 '$in': ['Exec', 'Admin']
@@ -249,7 +249,7 @@ describe('The Users controller', function() {
 
           // Find all users with is_couch_director=true
           // Should return 0 users
-          return admin.get('/users')
+          return admin.get('/v1/users')
             .send({
               'is_couch_director': true
             })
@@ -264,24 +264,24 @@ describe('The Users controller', function() {
     });
   });
 
-  describe('/users/:user', function() {
+  describe('/v1/users/:user', function() {
     it('should retrive a User with a GET request', function(done) {
       var user = request.agent(app);
-      user.post('/auth')
+      user.post('/v1/auth')
         .send({
           username: 'admin',
           password: 'adminSecret'
         })
         .expect(200)
         .then(function(res) {
-          return user.get('/users/test1')
+          return user.get('/v1/users/test1')
             .expect(200);
         })
         .then(function(res) {
           expect(res.body).to.have.property('username', 'test1');
           expect(res.body).to.have.property('email', 'test1@example.com');
           expect(res.body).to.not.have.property('password');
-          return user.get('/users/badTest')
+          return user.get('/v1/users/badTest')
             .expect(404);
         })
         .then(function(res) {
@@ -295,20 +295,20 @@ describe('The Users controller', function() {
 
     it('should check if a User exists', function(done) {
       var user = request.agent(app);
-      user.post('/auth')
+      user.post('/v1/auth')
         .send({
           username: 'admin',
           password: 'adminSecret'
         })
         .expect(200)
         .then(function(res) {
-          return user.get('/users/test1?exists=true')
+          return user.get('/v1/users/test1?exists=true')
             .expect(200);
         })
         .then(function(res) {
           expect(res.body).to.have.property('username', 'test1');
           expect(res.body).to.have.property('exists', true);
-          return user.get('/users/badUser?exists=true')
+          return user.get('/v1/users/badUser?exists=true')
             .expect(200);
         })
         .then(function(res) {
@@ -323,14 +323,14 @@ describe('The Users controller', function() {
 
     it('should modify a User with a PUT request', function(done) {
       var user = request.agent(app);
-      user.post('/auth')
+      user.post('/v1/auth')
         .send({
           username: 'admin',
           password: 'adminSecret'
         })
         .expect(200)
         .then(function(res) {
-          return user.put('/users/test1')
+          return user.put('/v1/users/test1')
             .send({
               first_name: 'Test',
               last_name: 'One'
@@ -341,7 +341,7 @@ describe('The Users controller', function() {
           expect(res.body).to.have.property('first_name', 'Test');
           expect(res.body).to.have.property('last_name', 'One');
           expect(res.body).to.not.have.property('password');
-          return user.put('/users/badUser')
+          return user.put('/v1/users/badUser')
             .send({
               first_name: 'Bad',
               last_name: 'User'
@@ -359,7 +359,7 @@ describe('The Users controller', function() {
 
     it('should prevent Users from modifying other User\'s passwords', function(done) {
       var user = request.agent(app);
-      user.post('/auth')
+      user.post('/v1/auth')
         .send({
           username: 'test1',
           password: 'secret1'
@@ -367,7 +367,7 @@ describe('The Users controller', function() {
         .expect(200)
         .then(function(res) {
           // Users should be able to change their own passwords
-          return user.put('/users/test1')
+          return user.put('/v1/users/test1')
             .send({
               password: 'newPassword'
             })
@@ -375,7 +375,7 @@ describe('The Users controller', function() {
         })
         .then(function(res) {
           // Users can't change other User's passwords
-          return user.put('/users/test2')
+          return user.put('/v1/users/test2')
             .send({
               password: 'alsoNewPassword'
             })
@@ -392,19 +392,19 @@ describe('The Users controller', function() {
 
     it('should delete a User with a DELETE request', function(done) {
       var user = request.agent(app);
-      user.post('/auth')
+      user.post('/v1/auth')
         .send({
           username: 'admin',
           password: 'adminSecret'
         })
         .expect(200)
         .then(function(res) {
-          return user.delete('/users/test4')
+          return user.delete('/v1/users/test4')
             .expect(200);
         })
         .then(function(res) {
           expect(res.body).to.have.property('removedUser', 'test4');
-          return user.delete('/users/badTest')
+          return user.delete('/v1/users/badTest')
             .expect(404);
         })
         .then(function(res) {

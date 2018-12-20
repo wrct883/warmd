@@ -1,7 +1,7 @@
 'use strict';
 
 var LocalStrategy = require('passport-local').Strategy,
-    User = require('../app/schema/userModel');
+    User = require('../app/v1/models/userModel');
 
 module.exports = function(passport) {
   // user -> username
@@ -11,7 +11,7 @@ module.exports = function(passport) {
 
   // id -> user
   passport.deserializeUser(function(username, done) {
-    User.findOne({username: username})
+    User.findOne({ username: username })
       .then(function(user) {
         if (!user) { // No user found
           done(new Error('No User found'));
@@ -27,16 +27,16 @@ module.exports = function(passport) {
   // use local strategy
   passport.use(new LocalStrategy(
     function(username, password, done) {
-      User.findOne({username: username})
+      User.findOne({ username: username })
         .then(function(user) {
           if (!user) {
-            return done(null, false, {message: 'Incorrect username'});
+            return done(null, false, { message: 'Incorrect username' });
           }
           // Found user
           user.comparePassword(password, function(matchErr, isMatch) {
             if (matchErr) done(matchErr);
             if (isMatch) return done(null, user);
-            return done(null, false, {message: 'Incorrect password'});
+            return done(null, false, { message: 'Incorrect password' });
           });
         })
         .catch(function(err) { // Could not find user / something went wrong

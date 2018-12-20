@@ -1,8 +1,6 @@
 'use strict';
 
-var express = require('express'),
-    hbs = require('express-hbs'),
-    bodyParser = require('body-parser'),
+var bodyParser = require('body-parser'),
     session = require('express-session'),
     cookieParser = require('cookie-parser'),
     morgan = require('morgan'),
@@ -24,19 +22,7 @@ module.exports = function(app, config, passport) {
     app.use(morgan());
   }
 
-
-  // Set rendering engines
-  app.engine('hbs', hbs.express3({
-    partialsDir: config.root + '/app/views/partials',
-    contentHelperName: 'content'
-  }));
-
-  app.set('view engine', 'hbs');
-  app.set('views', config.root + '/app/views');
-
-
   // Config for all environments
-
   app.use(cookieParser());              // Cookies
   app.use(bodyParser.json());           // Request bodies (query params, payloads)
   app.use(bodyParser.urlencoded({       // Request bodies (query params, payloads)
@@ -64,17 +50,9 @@ module.exports = function(app, config, passport) {
     }
   });
 
-  // Serve static content. Must be after static security middleware
-  app.use('/app', express.static(config.root + '/public/app'));
-  // TODO: Have cache conditional on development/production variable
-  app.use('/resources', express.static(config.root + '/public/resources' /*, {maxAge: 1000 * 60 * 60 * 24}*/));
-
   // Routes
-  if (config.is_mongo) {
-    require(config.routes_dir)(app, config, passport);
-  } else {
-    require('./routes')(app, config, passport);
-  }
+  require('./routes')(app, config, passport);
+
   // Lets handle errors. This should be the last middleware, before the 404 handler.
   app.use(function(err, req, res, next) {
     // treat as 404
@@ -85,12 +63,11 @@ module.exports = function(app, config, passport) {
     }
 
     if (err.message && err.message.indexOf('Unexpected') !== -1) {
-      res.json(400, {err: 'Malformed request: ' + err.message});
+      res.json(400, { err: 'Malformed request: ' + err.message });
       return;
     }
 
     // log it
-    // TODO: send emails
     console.error(err.stack);
 
     // error page

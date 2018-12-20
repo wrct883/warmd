@@ -1,7 +1,7 @@
 'use strict';
 
 var expect = require('chai').expect,
-    Artist = require('../../app/schema/artistModel');
+    Artist = require('../../app/v1/models/artistModel');
 
 describe('The Artist Model', function() {
   before(function(done) {
