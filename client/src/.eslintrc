@@ -8,7 +8,12 @@
   },
   "extends": [
     "eslint:recommended",
-    "plugin:react/recommended"
+    "plugin:react/recommended",
+    "airbnb",
+    "prettier",
+    "plugin:@typescript-eslint/recommended",
+    "prettier/react",
+    "prettier/@typescript-eslint"
   ],
   "parserOptions": {
     "ecmaVersion": 8, // or 2017
@@ -38,6 +43,11 @@
       "pragma": "React",
       "version": "detect",
       "flowVersion": "0.53"
+    },
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
     }
   },
   "rules": {
@@ -176,6 +186,23 @@
     "spaced-comment": [0, "always", { // http://eslint.org/docs/rules/spaced-comment
       "exceptions": ["*"],
       "markers": ["*"]
-    }]
-  }
+    }],
+    "import/extensions": [0, "ignorePackages"],
+    "react/require-extension": 0,
+    "react/jsx-closing-tag-location": [2],
+    "react/jsx-filename-extension": [2, {
+      "extensions": [".js", ".tsx"]
+    }],
+    "react/prefer-stateless-function": [2, {
+      "ignorePureComponents": true
+    }],
+    "@typescript-eslint/explicit-function-return-type": "off"
+  },
+  "overrides": [{
+    // enable the rule specifically for TypeScript files
+    "files": ["*.ts", "*.tsx"],
+    "rules": {
+      "@typescript-eslint/explicit-function-return-type": ["error"]
+    }
+  }]
 }

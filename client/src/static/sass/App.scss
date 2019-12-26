@@ -1,0 +1,24 @@
+.App {
+  text-align: center;
+
+  &-logo {
+    height: 80px;
+    margin-right: 10px;
+  }
+  
+  &-header {
+    display: flex;
+    justify-content: center;
+    height: 150px;
+    padding: 20px;
+    color: black;
+  }
+  
+  &-title {
+    font-size: 1.5em;
+  }
+  
+  &-intro {
+    font-size: large;
+  }
+}

@@ -2,7 +2,7 @@
 # Used for continuous integration testing.
 language: node_js
 node_js:
-  - "6"
+  - "10"
 services:
   - mongodb
 script:
