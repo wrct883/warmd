@@ -5,13 +5,21 @@
     height: 80px;
     margin-right: 10px;
   }
+
+  &-navbar {
+    display: flex;
+    background-color: #777777;
+  }
+
+  &-nav-link {
+    color: white;
+  }
   
   &-header {
     display: flex;
     justify-content: center;
-    height: 150px;
-    padding: 20px;
-    color: black;
+    align-items: center;
+    color: white;
   }
   
   &-title {
